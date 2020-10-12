@@ -288,7 +288,7 @@ int main() {
     srand(time(NULL));
     RenderWindow window(VideoMode(600, 760), "The Game!");
 
-    std::string image_root = "C:/Users/smw93/Desktop/project/image";
+    std::string image_root = "C:/Users/smw93/Desktop/big_tic_tac_toe/image";
     Texture pi[14];
     pi[0].loadFromFile(image_root + "/could_choose.png");
     pi[1].loadFromFile(image_root + "/empty.png");

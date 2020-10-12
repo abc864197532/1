@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/smw93/Desktop/project/big_tic_tac_toe1/player_to_com
+# Install script for directory: C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/player_to_com
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/smw93/Desktop/project/big_tic_tac_toe1/player_to_com/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/player_to_com/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
