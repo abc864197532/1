@@ -14,6 +14,7 @@ const double INF = 1e9;
 struct Table {
     int state[N][N], winner;
     bool finish;
+
     Table () { // init
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
@@ -70,6 +71,24 @@ struct Table {
         return state[x][y];
     }
 
+    bool get_dead(int p) {
+        for (int i = 0; i < N; ++i) {
+            bool tmp[2]{};
+            for (int j = 0; j < N; ++j) {
+                if (state[i][j] == -p) tmp[0] = true;
+                if (state[j][i] == -p) tmp[1] = true;
+            }
+            if (!tmp[0] || !tmp[1]) return false;
+        }
+        bool tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][i] == -p) tmp = true;
+        if (!tmp) return false;
+        tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][N - 1 - i] == -p) tmp = true;
+        if (!tmp) return false;
+        return true;
+    }
+
     bool move(int x, int y, int p) { // p -> player
         if (Finish() || !isEmpty(x, y)) {
             return false;
@@ -82,6 +101,7 @@ struct Table {
 
 struct Game {
     Table small[N][N], big;
+    bool dead[N][N][2];
     int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_big_cell = N * N;
     bool could_choose_all = true, finish = false;
 
@@ -101,6 +121,7 @@ struct Game {
         }
         small[x / N][y / N].move(x % N, y % N, cur_player);
         small[x / N][y / N].update_winner_and_finish();
+        dead[x / N][y / N][cur_player == 1 ? 0 : 1] = small[x / N][y / N].get_dead(-cur_player);
         if (small[x / N][y / N].Winner() != 0) {
             big.move(x / N, y / N, small[x / N][y / N].Winner());
             big.update_winner_and_finish();
@@ -131,6 +152,14 @@ struct Game {
 
     int Player() {
         return cur_player;
+    }
+
+    bool get_dead_s(int x, int y) {
+        return dead[x][y][cur_player == -1 ? 0 : 1];
+    }
+
+    bool get_dead_op(int x, int y) {
+        return dead[x][y][cur_player == 1 ? 0 : 1];
     }
 
     int get_output_picture(int x, int y) {
@@ -185,7 +214,7 @@ struct Player {
         vector<pair<int, int>> moves = game.valid_moves();
         pair<int, int> best = moves.front();
         double best_score = -INF;
-        for (auto i : moves) {
+        for (pair<int, int> i : moves) {
             double score = get_rating(game, i.first, i.second, dep);
             if (score > best_score)
                 best_score = score, best = i;
@@ -205,7 +234,7 @@ struct Player {
             line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
         //col
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < N; ++i)
             if (game.small[x / N][y / N].get_state(i, y % N) == game.Player()) tmp_s++;
             else if (game.small[x / N][y / N].get_state(i, y % N) == -game.Player()) tmp_op++;
         if (tmp_s == 0 || tmp_op == 0)
@@ -213,7 +242,7 @@ struct Player {
         //
         if (x % N == y % N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < N; ++i)
                 if (game.small[x / N][y / N].get_state(i, i) == game.Player()) tmp_s++;
                 else if (game.small[x / N][y / N].get_state(i, i) == -game.Player()) tmp_op++;
             if (tmp_s == 0 || tmp_op == 0)
@@ -221,7 +250,7 @@ struct Player {
         }
         if (x % N == 2 - y % N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < N; ++i)
                 if (game.small[x / N][y / N].get_state(i, 2 - i) == game.Player()) tmp_s++;
                 else if (game.small[x / N][y / N].get_state(i, 2 - i) == -game.Player()) tmp_op++;
             if (tmp_s == 0 || tmp_op == 0)
@@ -232,34 +261,54 @@ struct Player {
         line_sum = 0;
         //row
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        bool dead_s = false, dead_op = false;
+        for (int i = 0; i < N; dead_s |= game.get_dead_s(x / N, i), dead_op |= game.get_dead_op(x / N, i), ++i)
             if (game.big.get_state(x / N, i) == game.Player()) tmp_s++;
             else if (game.big.get_state(x / N, i) == -game.Player()) tmp_op++;
-        if (tmp_s == 0 || tmp_op == 0)
-            line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+        dead_s |= tmp_op > 0;
+        dead_op |= tmp_s > 0;
+        if (!dead_s)
+            line_sum += line_cnt[tmp_s] * s_op_rate[0];
+        if (!dead_op)
+            line_sum += line_cnt[tmp_op] * s_op_rate[1];
         //col
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        dead_s = false, dead_op = false;
+        for (int i = 0; i < N; dead_s |= game.get_dead_s(i, y / N), dead_op |= game.get_dead_op(i, y / N), ++i)
             if (game.big.get_state(i, y / N) == game.Player()) tmp_s++;
             else if (game.big.get_state(i, y / N) == -game.Player()) tmp_op++;
-        if (tmp_s == 0 || tmp_op == 0)
-            line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+        dead_s |= tmp_op > 0;
+        dead_op |= tmp_s > 0;
+        if (!dead_s)
+            line_sum += line_cnt[tmp_s] * s_op_rate[0];
+        if (!dead_op)
+            line_sum += line_cnt[tmp_op] * s_op_rate[1];
         //
         if (x / N == y / N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            dead_s = false, dead_op = false;
+            for (int i = 0; i < N; dead_s |= game.get_dead_s(i, i), dead_op |= game.get_dead_op(i, i), ++i)
                 if (game.big.get_state(i, i) == game.Player()) tmp_s++;
                 else if (game.big.get_state(i, i) == -game.Player()) tmp_op++;
-            if (tmp_s == 0 || tmp_op == 0)
-                line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+            dead_s |= tmp_op > 0;
+            dead_op |= tmp_s > 0;
+            if (!dead_s)
+                line_sum += line_cnt[tmp_s] * s_op_rate[0];
+            if (!dead_op)
+                line_sum += line_cnt[tmp_op] * s_op_rate[1];
         }
         if (x / N == 2 - y / N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            dead_s = false, dead_op = false;
+            for (int i = 0; i < N; dead_s |= game.get_dead_s(i, i), dead_op |= game.get_dead_op(i, i), ++i)
                 if (game.big.get_state(i, 2 - i) == game.Player()) tmp_s++;
                 else if (game.big.get_state(i, 2 - i) == -game.Player()) tmp_op++;
-            if (tmp_s == 0 || tmp_op == 0)
-                line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+            dead_s |= tmp_op > 0;
+            dead_op |= tmp_s > 0;
+            if (!dead_s)
+                line_sum += line_cnt[tmp_s] * s_op_rate[0];
+            if (!dead_op)
+                line_sum += line_cnt[tmp_op] * s_op_rate[1];
         }
         rat_big = line_sum / line_num[x / N][y / N];
         rat_s = rat_small * small_big_rate[0] + rat_big * small_big_rate[1];
@@ -284,11 +333,6 @@ void wait(int time) {
     while (clock() - t < time);
 }
 
-void mutation(double &v) {
-    double a = rdouble(rng);
-    v = (v * 3 + a * 2) / 5;
-}
-
 void play(Player &p1, Player &p2) {
     Game game = Game();
     Player p[2]{p1, p2};//p[0] 1 first
@@ -302,12 +346,20 @@ void play(Player &p1, Player &p2) {
     else if (game.Winner() == -1) ++p2.win;
 }
 
+void print_player(Player &p) {
+    for (int i = 0; i < 3; ++i) cout << p.line_cnt[i] << ' ';
+    for (int i = 0; i < 2; ++i) cout << p.s_op_rate[i] << ' ';
+    for (int i = 0; i < 2; ++i) cout << p.small_big_rate[i] << ' ';
+    for (int i = 0; i < 2; ++i) cout << p.next_now_rate[i] << ' ';
+    cout << endl;
+}
+
 void evolution (vector<Player> &init, int population, int t) {
     int choose_number = population / 10, retire_number = population / 10 * 3;
-    while (t--) {
+    for (int _t = 1; _t <= t; ++_t) {
         vector <Player> child;
         for (int choose; child.size() < retire_number;) {
-            shuffle(init.begin(),init.end(), rng);
+            shuffle(init.begin(), init.end(), rng);
             for (int i = 0; i < choose_number; ++i) {
                 for (int j = 0; j < choose_number; ++j) {
                     if (i == j) continue;
@@ -326,28 +378,26 @@ void evolution (vector<Player> &init, int population, int t) {
             choose = rint(0, 1);
             for (int i = 0; i < 2; i++) ch.next_now_rate[i] = par[choose].next_now_rate[i];
             // mutation
-            if (rint(0, 999) < 2) {
-                for (int i = 0; i < 2; ++i) {
-                    do {
-                        mutation(ch.line_cnt[0]);
-                        mutation(ch.line_cnt[1]);
-                    } while (ch.line_cnt[0] + ch.line_cnt[1] >= 1);
-                    ch.line_cnt[2] = 1.0 - ch.line_cnt[0] - ch.line_cnt[1];
-                }
+            if (rint(0, 999) < 20) {
+                do {
+                    ch.line_cnt[0] = rdouble(rng);
+                    ch.line_cnt[1] = rdouble(rng);
+                } while (ch.line_cnt[0] + ch.line_cnt[1] >= 1);
+                ch.line_cnt[2] = 1.0 - ch.line_cnt[0] - ch.line_cnt[1];
+                sort(ch.line_cnt, ch.line_cnt + 3);
             }
-            if (rint(0, 999) < 2) {
-                mutation(ch.s_op_rate[0]);
+            if (rint(0, 999) < 20) {
+                ch.s_op_rate[0] = rdouble(rng);
                 ch.s_op_rate[1] = 1.0 - ch.s_op_rate[0];
             }
-            if (rint(0, 999) < 2) {
-                mutation(ch.small_big_rate[0]);
+            if (rint(0, 999) < 20) {
+                ch.small_big_rate[0] = rdouble(rng);
                 ch.small_big_rate[1] = 1.0 - ch.small_big_rate[0];
                 if (ch.small_big_rate[0] > ch.small_big_rate[1])
                     swap(ch.small_big_rate[0], ch.small_big_rate[1]);
             }
-            if (rint(0, 999) < 2) {
-                mutation(ch.next_now_rate[0]);
-                ch.next_now_rate[1] = 1.0 - ch.next_now_rate[0];
+            if (rint(0, 999) < 20) {
+                ch.next_now_rate[0] = rdouble(rng), ch.next_now_rate[1] = 1.0 - ch.next_now_rate[0];
                 if (ch.next_now_rate[0] > ch.next_now_rate[1])
                     swap(ch.next_now_rate[0], ch.next_now_rate[1]);
             }
@@ -361,16 +411,22 @@ void evolution (vector<Player> &init, int population, int t) {
                 play(init[i], init[j]);
             }
         }
+        shuffle(init.begin(), init.end(), rng);
         sort(init.begin(), init.end());
         for (int i = 0; i < population; ++i) init[i].win = 0;
         for (int i = 0; i < retire_number; ++i) init[population - 1 - i] = child[i];
+        cout << "Evolution " << _t << ":\n";
+        cout << "Below are the vectors\n";
+        for (Player &p : init) print_player(p);
     }
 }
 
 int main() {
     srand(time(NULL));
-    int population = 50, number_of_change = 20;
+    int population = 20, number_of_change = 2;
     double tt = clock();
+    cout << fixed << setprecision(6);
+    freopen("output.txt", "w", stdout);
     vector <Player> P(population);
     evolution(P, population, number_of_change);
     for (int i = 0; i < population; ++i) {
@@ -380,16 +436,8 @@ int main() {
         }
     }
     sort(P.begin(), P.end());
-    freopen("output.txt", "w", stdout);
-    cout << fixed << setprecision(6);
     cout << "Finished!\n";
     cout << "Time: " << clock() - tt << endl;
     cout << "Below are the vectors\n";
-    for (Player &p : P) {
-        for (int i = 0; i < 3; ++i) cout << p.line_cnt[i] << ' ';
-        for (int i = 0; i < 2; ++i) cout << p.s_op_rate[i] << ' ';
-        for (int i = 0; i < 2; ++i) cout << p.small_big_rate[i] << ' ';
-        for (int i = 0; i < 2; ++i) cout << p.next_now_rate[i] << ' ';
-        cout << endl;
-    }
+    for (Player &p : P) print_player(p);
 }

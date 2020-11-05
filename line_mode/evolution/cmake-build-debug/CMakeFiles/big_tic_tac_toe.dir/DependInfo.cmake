@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/smw93/Desktop/project/big_tic_tac_toe1_score/main.cpp" "C:/Users/smw93/Desktop/project/big_tic_tac_toe1_score/cmake-build-debug/CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj"
+  "C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/evolution/main.cpp" "C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/evolution/cmake-build-debug/CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
