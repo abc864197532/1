@@ -1,0 +1,7 @@
+line_cnt為連線的數量與對應的分數
+
+s_op_rate為進攻與防守的比重
+
+small_big_rate為小格子與大格子的比重
+
+next_now為下一步與當前步的比重

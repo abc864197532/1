@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/smw93/Desktop/project/big_tic_tac_toe1/player_to_player/main.cpp" "C:/Users/smw93/Desktop/project/big_tic_tac_toe1/player_to_player/cmake-build-debug/CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj"
+  "C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/player_to_player/main.cpp" "C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/player_to_player/cmake-build-debug/CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

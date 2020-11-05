@@ -6,6 +6,7 @@ using namespace std;
 const int N = 3;
 
 // -1 O 0 empty 1 X
+// -1 O 0 empty 1 X
 struct Table {
     int state[N][N], winner;
     bool finish;
@@ -66,6 +67,24 @@ struct Table {
         return state[x][y];
     }
 
+    bool get_dead(int p) {
+        for (int i = 0; i < N; ++i) {
+            bool tmp[2]{};
+            for (int j = 0; j < N; ++j) {
+                if (state[i][j] == -p) tmp[0] = true;
+                if (state[j][i] == -p) tmp[1] = true;
+            }
+            if (!tmp[0] || !tmp[1]) return false;
+        }
+        bool tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][i] == -p) tmp = true;
+        if (!tmp) return false;
+        tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][N - 1 - i] == -p) tmp = true;
+        if (!tmp) return false;
+        return true;
+    }
+
     bool move(int x, int y, int p) { // p -> player
         if (Finish() || !isEmpty(x, y)) {
             return false;
@@ -78,6 +97,7 @@ struct Table {
 
 struct Game {
     Table small[N][N], big;
+    bool dead[N][N][2];
     int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_big_cell = N * N;
     bool could_choose_all = true, finish = false;
 
@@ -97,6 +117,7 @@ struct Game {
         }
         small[x / N][y / N].move(x % N, y % N, cur_player);
         small[x / N][y / N].update_winner_and_finish();
+        dead[x / N][y / N][cur_player == 1 ? 0 : 1] = small[x / N][y / N].get_dead(-cur_player);
         if (small[x / N][y / N].Winner() != 0) {
             big.move(x / N, y / N, small[x / N][y / N].Winner());
             big.update_winner_and_finish();
@@ -127,6 +148,14 @@ struct Game {
 
     int Player() {
         return cur_player;
+    }
+
+    bool get_dead_s(int x, int y) {
+        return dead[x][y][cur_player == -1 ? 0 : 1];
+    }
+
+    bool get_dead_op(int x, int y) {
+        return dead[x][y][cur_player == 1 ? 0 : 1];
     }
 
     int get_output_picture(int x, int y) {
@@ -204,6 +233,7 @@ int main() {
             if (!game.Finish() && e.type == Event::MouseButtonPressed) {
                 if (e.key.code == Mouse::Left) {
                     if (x >= 0 && x < 9 && y >= 0 && y < 9) {
+                        cout << (game.Player() == 1 ? "Red " : "Blue: ") << x << ' ' << y << endl;
                         game.move(x, y);
                     }
                 }

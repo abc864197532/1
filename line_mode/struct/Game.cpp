@@ -1,5 +1,6 @@
 struct Game {
     Table small[N][N], big;
+    bool dead[N][N][2];
     int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_big_cell = N * N;
     bool could_choose_all = true, finish = false;
 
@@ -19,6 +20,7 @@ struct Game {
         }
         small[x / N][y / N].move(x % N, y % N, cur_player);
         small[x / N][y / N].update_winner_and_finish();
+        dead[x / N][y / N][cur_player == 1 ? 0 : 1] = small[x / N][y / N].get_dead(-cur_player);
         if (small[x / N][y / N].Winner() != 0) {
             big.move(x / N, y / N, small[x / N][y / N].Winner());
             big.update_winner_and_finish();
@@ -49,6 +51,14 @@ struct Game {
 
     int Player() {
         return cur_player;
+    }
+
+    bool get_dead_s(int x, int y) {
+        return dead[x][y][cur_player == -1 ? 0 : 1];
+    }
+
+    bool get_dead_op(int x, int y) {
+        return dead[x][y][cur_player == 1 ? 0 : 1];
     }
 
     int get_output_picture(int x, int y) {

@@ -13,7 +13,7 @@ uniform_real_distribution<> rdouble(0.0, 1.0);
 struct Table {
     int state[N][N], winner;
     bool finish;
-    
+
     Table () { // init
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
@@ -70,6 +70,24 @@ struct Table {
         return state[x][y];
     }
 
+    bool get_dead(int p) {
+        for (int i = 0; i < N; ++i) {
+            bool tmp[2]{};
+            for (int j = 0; j < N; ++j) {
+                if (state[i][j] == -p) tmp[0] = true;
+                if (state[j][i] == -p) tmp[1] = true;
+            }
+            if (!tmp[0] || !tmp[1]) return false;
+        }
+        bool tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][i] == -p) tmp = true;
+        if (!tmp) return false;
+        tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][N - 1 - i] == -p) tmp = true;
+        if (!tmp) return false;
+        return true;
+    }
+
     bool move(int x, int y, int p) { // p -> player
         if (Finish() || !isEmpty(x, y)) {
             return false;
@@ -82,6 +100,7 @@ struct Table {
 
 struct Game {
     Table small[N][N], big;
+    bool dead[N][N][2];
     int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_big_cell = N * N;
     bool could_choose_all = true, finish = false;
 
@@ -101,6 +120,7 @@ struct Game {
         }
         small[x / N][y / N].move(x % N, y % N, cur_player);
         small[x / N][y / N].update_winner_and_finish();
+        dead[x / N][y / N][cur_player == 1 ? 0 : 1] = small[x / N][y / N].get_dead(-cur_player);
         if (small[x / N][y / N].Winner() != 0) {
             big.move(x / N, y / N, small[x / N][y / N].Winner());
             big.update_winner_and_finish();
@@ -133,6 +153,14 @@ struct Game {
         return cur_player;
     }
 
+    bool get_dead_s(int x, int y) {
+        return dead[x][y][cur_player == -1 ? 0 : 1];
+    }
+
+    bool get_dead_op(int x, int y) {
+        return dead[x][y][cur_player == 1 ? 0 : 1];
+    }
+
     int get_output_picture(int x, int y) {
         int shift = 0;
         if (small[x / N][y / N].Winner() == 1) {
@@ -161,7 +189,7 @@ struct Game {
     }
 };
 
-const int depth = 3, line_num[3][3]{3, 2, 3, 2, 4, 2, 3, 2, 3};
+const int depth = 2, line_num[3][3]{3, 2, 3, 2, 4, 2, 3, 2, 3};
 
 struct Player {
     double line_cnt[3], s_op_rate[2], small_big_rate[2], next_now_rate[2];
@@ -185,7 +213,7 @@ struct Player {
         vector<pair<int, int>> moves = game.valid_moves();
         pair<int, int> best = moves.front();
         double best_score = -INF;
-        for (auto i : moves) {
+        for (pair<int, int> i : moves) {
             double score = get_rating(game, i.first, i.second, dep);
             if (score > best_score)
                 best_score = score, best = i;
@@ -205,7 +233,7 @@ struct Player {
             line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
         //col
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < N; ++i)
             if (game.small[x / N][y / N].get_state(i, y % N) == game.Player()) tmp_s++;
             else if (game.small[x / N][y / N].get_state(i, y % N) == -game.Player()) tmp_op++;
         if (tmp_s == 0 || tmp_op == 0)
@@ -213,7 +241,7 @@ struct Player {
         //
         if (x % N == y % N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < N; ++i)
                 if (game.small[x / N][y / N].get_state(i, i) == game.Player()) tmp_s++;
                 else if (game.small[x / N][y / N].get_state(i, i) == -game.Player()) tmp_op++;
             if (tmp_s == 0 || tmp_op == 0)
@@ -221,7 +249,7 @@ struct Player {
         }
         if (x % N == 2 - y % N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < N; ++i)
                 if (game.small[x / N][y / N].get_state(i, 2 - i) == game.Player()) tmp_s++;
                 else if (game.small[x / N][y / N].get_state(i, 2 - i) == -game.Player()) tmp_op++;
             if (tmp_s == 0 || tmp_op == 0)
@@ -232,34 +260,54 @@ struct Player {
         line_sum = 0;
         //row
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        bool dead_s = false, dead_op = false;
+        for (int i = 0; i < N; dead_s |= game.get_dead_s(x / N, i), dead_op |= game.get_dead_op(x / N, i), ++i)
             if (game.big.get_state(x / N, i) == game.Player()) tmp_s++;
             else if (game.big.get_state(x / N, i) == -game.Player()) tmp_op++;
-        if (tmp_s == 0 || tmp_op == 0)
-            line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+        dead_s |= tmp_op > 0;
+        dead_op |= tmp_s > 0;
+        if (!dead_s)
+            line_sum += line_cnt[tmp_s] * s_op_rate[0];
+        if (!dead_op)
+            line_sum += line_cnt[tmp_op] * s_op_rate[1];
         //col
         tmp_s = 0, tmp_op = 0;
-        for (int i = 0; i < 3; ++i)
+        dead_s = false, dead_op = false;
+        for (int i = 0; i < N; dead_s |= game.get_dead_s(i, y / N), dead_op |= game.get_dead_op(i, y / N), ++i)
             if (game.big.get_state(i, y / N) == game.Player()) tmp_s++;
             else if (game.big.get_state(i, y / N) == -game.Player()) tmp_op++;
-        if (tmp_s == 0 || tmp_op == 0)
-            line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+        dead_s |= tmp_op > 0;
+        dead_op |= tmp_s > 0;
+        if (!dead_s)
+            line_sum += line_cnt[tmp_s] * s_op_rate[0];
+        if (!dead_op)
+            line_sum += line_cnt[tmp_op] * s_op_rate[1];
         //
         if (x / N == y / N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            dead_s = false, dead_op = false;
+            for (int i = 0; i < N; dead_s |= game.get_dead_s(i, i), dead_op |= game.get_dead_op(i, i), ++i)
                 if (game.big.get_state(i, i) == game.Player()) tmp_s++;
                 else if (game.big.get_state(i, i) == -game.Player()) tmp_op++;
-            if (tmp_s == 0 || tmp_op == 0)
-                line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+            dead_s |= tmp_op > 0;
+            dead_op |= tmp_s > 0;
+            if (!dead_s)
+                line_sum += line_cnt[tmp_s] * s_op_rate[0];
+            if (!dead_op)
+                line_sum += line_cnt[tmp_op] * s_op_rate[1];
         }
         if (x / N == 2 - y / N) {
             tmp_s = 0, tmp_op = 0;
-            for (int i = 0; i < 3; ++i)
+            dead_s = false, dead_op = false;
+            for (int i = 0; i < N; dead_s |= game.get_dead_s(i, i), dead_op |= game.get_dead_op(i, i), ++i)
                 if (game.big.get_state(i, 2 - i) == game.Player()) tmp_s++;
                 else if (game.big.get_state(i, 2 - i) == -game.Player()) tmp_op++;
-            if (tmp_s == 0 || tmp_op == 0)
-                line_sum += line_cnt[tmp_s] * s_op_rate[0] + line_cnt[tmp_op] * s_op_rate[1];
+            dead_s |= tmp_op > 0;
+            dead_op |= tmp_s > 0;
+            if (!dead_s)
+                line_sum += line_cnt[tmp_s] * s_op_rate[0];
+            if (!dead_op)
+                line_sum += line_cnt[tmp_op] * s_op_rate[1];
         }
         rat_big = line_sum / line_num[x / N][y / N];
         rat_s = rat_small * small_big_rate[0] + rat_big * small_big_rate[1];
@@ -318,6 +366,13 @@ int main() {
     for (int i = 0; i < 2; ++i) cin >> com.small_big_rate[i];
     for (int i = 0; i < 2; ++i) cin >> com.next_now_rate[i];
 
+    bool player_first = false;  // first or second
+    if (!player_first) {
+        pair<int, int> next_move = com.best_move(game);
+        game.move(next_move.first, next_move.second);
+        cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
+    }
+
     while (window.isOpen()) {
         Vector2i pos = Mouse::getPosition(window);
 
@@ -333,8 +388,12 @@ int main() {
             if (!game.Finish() && e.type == Event::MouseButtonPressed) {
                 if (e.key.code == Mouse::Left) {
                     if (x >= 0 && x < 9 && y >= 0 && y < 9 && game.move(x, y)) {
-                        pair<int, int> next_move = com.best_move(game);
-                        game.move(next_move.first, next_move.second);
+                        cout << (player_first ? "Red: " : "Blue: ") << x << ' ' << y << endl;
+                        if (!game.Finish())  {
+                            pair<int, int> next_move = com.best_move(game);
+                            cout << (player_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
+                            game.move(next_move.first, next_move.second);
+                        }
                     }
                 }
             }

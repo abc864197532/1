@@ -2,7 +2,7 @@
 struct Table {
     int state[N][N], winner;
     bool finish;
-    
+
     Table () { // init
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
@@ -57,6 +57,24 @@ struct Table {
 
     int get_state(int x, int y) {
         return state[x][y];
+    }
+
+    bool get_dead(int p) {
+        for (int i = 0; i < N; ++i) {
+            bool tmp[2]{};
+            for (int j = 0; j < N; ++j) {
+                if (state[i][j] == -p) tmp[0] = true;
+                if (state[j][i] == -p) tmp[1] = true;
+            }
+            if (!tmp[0] || !tmp[1]) return false;
+        }
+        bool tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][i] == -p) tmp = true;
+        if (!tmp) return false;
+        tmp = false;
+        for (int i = 0; i < N; ++i) if (state[i][N - 1 - i] == -p) tmp = true;
+        if (!tmp) return false;
+        return true;
     }
 
     bool move(int x, int y, int p) { // p -> player

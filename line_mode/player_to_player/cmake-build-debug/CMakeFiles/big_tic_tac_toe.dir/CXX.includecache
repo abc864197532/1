@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/smw93/Desktop/project/big_tic_tac_toe1/player_to_player/main.cpp
+C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/player_to_player/main.cpp
 SFML/Graphics.hpp
 -
 bits/stdc++.h
