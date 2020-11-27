@@ -67,10 +67,10 @@ RM = "C:\Program Files\JetBrains\CLion 2020.2\bin\cmake\win\bin\cmake.exe" -E rm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player
+CMAKE_SOURCE_DIR = C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -130,17 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named big_tic_tac_toe
+# Target rules for targets named player_to_player
 
 # Build rule for target.
-big_tic_tac_toe: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 big_tic_tac_toe
-.PHONY : big_tic_tac_toe
+player_to_player: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 player_to_player
+.PHONY : player_to_player
 
 # fast build rule for target.
-big_tic_tac_toe/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/build
-.PHONY : big_tic_tac_toe/fast
+player_to_player/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/build
+.PHONY : player_to_player/fast
 
 main.obj: main.cpp.obj
 
@@ -148,7 +148,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -157,7 +157,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -166,7 +166,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -177,7 +177,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... big_tic_tac_toe
+	@echo ... player_to_player
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

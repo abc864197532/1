@@ -33,17 +33,17 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Program Files/JetBrains/CLion 2020.2/bin/cmake/win/share/cmake-3.17/Modules/Platform/Windows.cmake"
   "C:/Program Files/JetBrains/CLion 2020.2/bin/cmake/win/share/cmake-3.17/Modules/Platform/WindowsPaths.cmake"
   "C:/Program Files/JetBrains/CLion 2020.2/bin/cmake/win/share/cmake-3.17/Modules/ProcessorCount.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLConfig.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLConfigDependencies.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLConfigVersion.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets-debug.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets-release.cmake"
+  "C:/Users/smw93/Desktop/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets.cmake"
   "../CMakeLists.txt"
   "CMakeFiles/3.17.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.17.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.17.3/CMakeRCCompiler.cmake"
   "CMakeFiles/3.17.3/CMakeSystem.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLConfig.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLConfigDependencies.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLConfigVersion.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets-debug.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets-release.cmake"
-  "C:/Users/smw93/Downloads/SFML-2.5.1/lib/cmake/SFML/SFMLStaticTargets.cmake"
   )
 
 # The corresponding makefile is:
@@ -59,5 +59,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/big_tic_tac_toe.dir/DependInfo.cmake"
+  "CMakeFiles/player_to_com.dir/DependInfo.cmake"
   )

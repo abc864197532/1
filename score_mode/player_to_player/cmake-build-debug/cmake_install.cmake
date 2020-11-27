@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/smw93/Desktop/project/big_tic_tac_toe2/big_tic_tac_toe2_player_to_player
+# Install script for directory: C:/Users/smw93/Desktop/big_tic_tac_toe/score_mode/player_to_player
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/big_tic_tac_toe")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/player_to_player")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/smw93/Desktop/project/big_tic_tac_toe2/big_tic_tac_toe2_player_to_player/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/smw93/Desktop/big_tic_tac_toe/score_mode/player_to_player/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

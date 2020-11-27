@@ -63,16 +63,16 @@ RM = "C:\Program Files\JetBrains\CLion 2020.2\bin\cmake\win\bin\cmake.exe" -E rm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player
+CMAKE_SOURCE_DIR = C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/big_tic_tac_toe.dir/all
+all: CMakeFiles/player_to_player.dir/all
 
 .PHONY : all
 
@@ -82,36 +82,36 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/big_tic_tac_toe.dir/clean
+clean: CMakeFiles/player_to_player.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/big_tic_tac_toe.dir
+# Target rules for target CMakeFiles/player_to_player.dir
 
 # All Build rule for target.
-CMakeFiles/big_tic_tac_toe.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target big_tic_tac_toe"
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/all
+CMakeFiles/player_to_player.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target player_to_player"
+.PHONY : CMakeFiles/player_to_player.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/big_tic_tac_toe.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/big_tic_tac_toe.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\project\big_tic_tac_toe2\big_tic_tac_toe2_player_to_player\cmake-build-debug\CMakeFiles 0
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/rule
+CMakeFiles/player_to_player.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/player_to_player.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\score_mode\player_to_player\cmake-build-debug\CMakeFiles 0
+.PHONY : CMakeFiles/player_to_player.dir/rule
 
 # Convenience name for target.
-big_tic_tac_toe: CMakeFiles/big_tic_tac_toe.dir/rule
+player_to_player: CMakeFiles/player_to_player.dir/rule
 
-.PHONY : big_tic_tac_toe
+.PHONY : player_to_player
 
 # clean rule for target.
-CMakeFiles/big_tic_tac_toe.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/clean
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/clean
+CMakeFiles/player_to_player.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_player.dir\build.make CMakeFiles/player_to_player.dir/clean
+.PHONY : CMakeFiles/player_to_player.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

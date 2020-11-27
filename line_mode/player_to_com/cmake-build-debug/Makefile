@@ -130,17 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named big_tic_tac_toe
+# Target rules for targets named player_to_com
 
 # Build rule for target.
-big_tic_tac_toe: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 big_tic_tac_toe
-.PHONY : big_tic_tac_toe
+player_to_com: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 player_to_com
+.PHONY : player_to_com
 
 # fast build rule for target.
-big_tic_tac_toe/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/build
-.PHONY : big_tic_tac_toe/fast
+player_to_com/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/build
+.PHONY : player_to_com/fast
 
 main.obj: main.cpp.obj
 
@@ -148,7 +148,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -157,7 +157,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -166,7 +166,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -177,7 +177,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... big_tic_tac_toe
+	@echo ... player_to_com
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

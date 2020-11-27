@@ -72,7 +72,7 @@ CMAKE_BINARY_DIR = C:\Users\smw93\Desktop\big_tic_tac_toe\line_mode\player_to_co
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/big_tic_tac_toe.dir/all
+all: CMakeFiles/player_to_com.dir/all
 
 .PHONY : all
 
@@ -82,36 +82,36 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/big_tic_tac_toe.dir/clean
+clean: CMakeFiles/player_to_com.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/big_tic_tac_toe.dir
+# Target rules for target CMakeFiles/player_to_com.dir
 
 # All Build rule for target.
-CMakeFiles/big_tic_tac_toe.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\smw93\Desktop\big_tic_tac_toe\line_mode\player_to_com\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target big_tic_tac_toe"
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/all
+CMakeFiles/player_to_com.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\smw93\Desktop\big_tic_tac_toe\line_mode\player_to_com\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target player_to_com"
+.PHONY : CMakeFiles/player_to_com.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/big_tic_tac_toe.dir/rule: cmake_check_build_system
+CMakeFiles/player_to_com.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\line_mode\player_to_com\cmake-build-debug\CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/big_tic_tac_toe.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/player_to_com.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\smw93\Desktop\big_tic_tac_toe\line_mode\player_to_com\cmake-build-debug\CMakeFiles 0
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/rule
+.PHONY : CMakeFiles/player_to_com.dir/rule
 
 # Convenience name for target.
-big_tic_tac_toe: CMakeFiles/big_tic_tac_toe.dir/rule
+player_to_com: CMakeFiles/player_to_com.dir/rule
 
-.PHONY : big_tic_tac_toe
+.PHONY : player_to_com
 
 # clean rule for target.
-CMakeFiles/big_tic_tac_toe.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/clean
-.PHONY : CMakeFiles/big_tic_tac_toe.dir/clean
+CMakeFiles/player_to_com.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\player_to_com.dir\build.make CMakeFiles/player_to_com.dir/clean
+.PHONY : CMakeFiles/player_to_com.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
