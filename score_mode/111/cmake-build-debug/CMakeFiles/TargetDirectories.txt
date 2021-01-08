@@ -1,3 +1,0 @@
-C:/Users/smw93/Desktop/project/big_tic_tac_toe2/big_tic_tac_toe2_player_to_player/cmake-build-debug/CMakeFiles/big_tic_tac_toe.dir
-C:/Users/smw93/Desktop/project/big_tic_tac_toe2/big_tic_tac_toe2_player_to_player/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/smw93/Desktop/project/big_tic_tac_toe2/big_tic_tac_toe2_player_to_player/cmake-build-debug/CMakeFiles/rebuild_cache.dir

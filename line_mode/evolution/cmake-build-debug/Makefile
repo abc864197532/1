@@ -130,17 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named big_tic_tac_toe
+# Target rules for targets named evolution
 
 # Build rule for target.
-big_tic_tac_toe: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 big_tic_tac_toe
-.PHONY : big_tic_tac_toe
+evolution: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 evolution
+.PHONY : evolution
 
 # fast build rule for target.
-big_tic_tac_toe/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/build
-.PHONY : big_tic_tac_toe/fast
+evolution/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\evolution.dir\build.make CMakeFiles/evolution.dir/build
+.PHONY : evolution/fast
 
 main.obj: main.cpp.obj
 
@@ -148,7 +148,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\evolution.dir\build.make CMakeFiles/evolution.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -157,7 +157,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\evolution.dir\build.make CMakeFiles/evolution.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -166,7 +166,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\big_tic_tac_toe.dir\build.make CMakeFiles/big_tic_tac_toe.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\evolution.dir\build.make CMakeFiles/evolution.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -177,7 +177,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... big_tic_tac_toe
+	@echo ... evolution
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

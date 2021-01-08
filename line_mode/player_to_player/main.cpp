@@ -196,7 +196,7 @@ int main() {
     RenderWindow window(VideoMode(600, 760), "The Game!");
 
     std::string image_root = "C:/Users/smw93/Desktop/big_tic_tac_toe/image";
-    Texture pi[14];
+    Texture pi[15];
     pi[0].loadFromFile(image_root + "/could_choose.png");
     pi[1].loadFromFile(image_root + "/empty.png");
     pi[2].loadFromFile(image_root + "/red.png");
@@ -211,9 +211,10 @@ int main() {
     pi[11].loadFromFile(image_root + "/blue_win.png");
     pi[12].loadFromFile(image_root + "/red_word.png");
     pi[13].loadFromFile(image_root + "/red_win.png");
+    pi[14].loadFromFile(image_root + "/block.png");
 
-    Sprite picture[14];
-    for (int i = 0; i < 14; ++i) picture[i] = Sprite(pi[i]);
+    Sprite picture[15];
+    for (int i = 0; i < 15; ++i) picture[i] = Sprite(pi[i]);
 
     int w = 65, state = 0;
     Game game;
@@ -241,6 +242,12 @@ int main() {
         }
 
         window.clear(Color::White);
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                picture[14].setPosition(i * 3 * w + 5, j * 3 * w + 167);
+                window.draw(picture[14]);
+            }
+        }
         if (game.Finish()) {
             if (game.Winner() == 1) {
                 if (state == 0) {

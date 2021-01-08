@@ -366,7 +366,7 @@ int main() {
     for (int i = 0; i < 2; ++i) cin >> com.small_big_rate[i];
     for (int i = 0; i < 2; ++i) cin >> com.next_now_rate[i];
 
-    bool player_first = false;  // first or second
+    bool player_first = true;  // first or second
     if (!player_first) {
         pair<int, int> next_move = com.best_move(game);
         game.move(next_move.first, next_move.second);

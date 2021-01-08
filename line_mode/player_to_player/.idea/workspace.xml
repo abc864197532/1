@@ -54,9 +54,9 @@
     <property name="cf.first.check.clang-format" value="false" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="player_to_player" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="player_to_player" TARGET_NAME="player_to_player" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="player_to_player" RUN_TARGET_NAME="player_to_player">
@@ -80,6 +80,7 @@
       <updated>1606499364002</updated>
       <workItem from="1606499365759" duration="140000" />
       <workItem from="1606499606303" duration="17000" />
+      <workItem from="1607520832924" duration="646000" />
     </task>
     <servers />
   </component>
@@ -99,21 +100,21 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1606499623425">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1607521483104">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606499623425" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1606499623425">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607521483104" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1607521483104">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1606499623425" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1606499623425">
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607521483104" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1607521483104">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1606499623425" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1606499623425">
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607521483104" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1607521483104">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1606499623425" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607521483104" />
   </component>
 </project>

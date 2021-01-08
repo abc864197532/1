@@ -183,7 +183,7 @@ int main() {
     RenderWindow window(VideoMode(600, 760), "The Game!");
 
     std::string image_root = "C:/Users/smw93/Desktop/big_tic_tac_toe/image";
-    Texture pi[8], db[10], dr[10];
+    Texture pi[9], db[10], dr[10];
     pi[0].loadFromFile(image_root + "/could_choose.png");
     pi[1].loadFromFile(image_root + "/empty.png");
     pi[2].loadFromFile(image_root + "/red.png");
@@ -192,13 +192,14 @@ int main() {
     pi[5].loadFromFile(image_root + "/blue_win.png");
     pi[6].loadFromFile(image_root + "/red_word.png");
     pi[7].loadFromFile(image_root + "/red_win.png");
+    pi[8].loadFromFile(image_root + "/block.png");
     for (int i = 0; i < 10; ++i) {
         db[i].loadFromFile(image_root + "/blue_digit/" + char('0' + i) + ".png");
         dr[i].loadFromFile(image_root + "/red_digit/" + char('0' + i) + ".png");
     }
 
-    Sprite picture[8], blue_digit[10], red_digit[10];
-    for (int i = 0; i < 8; ++i) picture[i] = Sprite(pi[i]);
+    Sprite picture[9], blue_digit[10], red_digit[10];
+    for (int i = 0; i < 9; ++i) picture[i] = Sprite(pi[i]);
     for (int i = 0; i < 10; ++i) blue_digit[i] = Sprite(db[i]);
     for (int i = 0; i < 10; ++i) red_digit[i] = Sprite(dr[i]);
 
@@ -227,6 +228,12 @@ int main() {
         }
 
         window.clear(Color::White);
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                picture[8].setPosition(i * 3 * w + 5, j * 3 * w + 167);
+                window.draw(picture[8]);
+            }
+        }
         int red_score = game.Get_Red_Score(), blue_score = game.Get_Blue_Score();
         red_digit[red_score / 10].setPosition(0, 0);
         window.draw(red_digit[red_score / 10]);
