@@ -403,7 +403,7 @@ void evolution (vector<vector <Player>> &first, vector <vector <Player>> &second
         cout << "Start " << _t << endl;
 		shuffle(id.begin(), id.end(), rng);
         for (int cur_id = 0; cur_id < group; ++cur_id) {
-        	cout << "Matching " << cur_id << endl;
+            cout << "Matching " << cur_id << endl;
         	cout << "Now Time " << (clock() - tt) / 1000 << endl;
             int firstid = cur_id, secondid = id[cur_id];
             vector <Player> firstchild, secondchild;
