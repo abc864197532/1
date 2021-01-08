@@ -401,10 +401,10 @@ void evolution (vector<vector <Player>> &first, vector <vector <Player>> &second
     for (int i = 0; i < group; ++i) id[i] = i;
     for (int _t = 1; _t <= t; ++_t) {
         cout << "Start " << _t << endl;
-		shuffle(id.begin(), id.end(), rng);
+        shuffle(id.begin(), id.end(), rng);
         for (int cur_id = 0; cur_id < group; ++cur_id) {
             cout << "Matching " << cur_id << endl;
-        	cout << "Now Time " << (clock() - tt) / 1000 << endl;
+            cout << "Now Time " << (clock() - tt) / 1000 << endl;
             int firstid = cur_id, secondid = id[cur_id];
             vector <Player> firstchild, secondchild;
             for (int child_number = 0; child_number < retire_number; ++child_number) {
@@ -427,8 +427,8 @@ void evolution (vector<vector <Player>> &first, vector <vector <Player>> &second
                 }
             }
             cout << "Finish child generation" << endl;
-        	cout << "Now Time " << (clock() - tt) / 1000 << endl;
-			for (int i = 0; i < population; ++i) {
+            cout << "Now Time " << (clock() - tt) / 1000 << endl;
+            for (int i = 0; i < population; ++i) {
                 for (int j = 0; j < population; ++j) {
                     play(first[firstid][i], second[secondid][j]);
                 }
