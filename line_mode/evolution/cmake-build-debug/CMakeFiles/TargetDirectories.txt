@@ -1,3 +1,0 @@
-C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/evolution/cmake-build-debug/CMakeFiles/evolution.dir
-C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/evolution/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/smw93/Desktop/big_tic_tac_toe/line_mode/evolution/cmake-build-debug/CMakeFiles/rebuild_cache.dir
