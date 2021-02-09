@@ -1,13 +1,12 @@
-#include <SFML/Graphics.hpp>
 #include <bits/stdc++.h>
-using namespace sf;
 using namespace std;
 
-const int N = 3;
 const double INF = 1e9, eps = 1e-12;
 auto SEED = chrono::steady_clock::now().time_since_epoch().count();
 mt19937 rng(SEED);
 uniform_real_distribution<> rdouble(0.0, 1.0);
+
+inline int rint(int a, int b) {return uniform_int_distribution<int>(a, b)(rng);}
 
 // -1 O 0 empty 1 X
 struct Table {
@@ -507,130 +506,182 @@ struct Player {
     }
 };
 
-void wait(int time) {
-    double t = clock();
-    while (clock() - t < time);
+void play(Player &p1, Player &p2) {
+    Game game = Game();
+    Player p[2]{p1, p2}; //p[0] 1 first
+    int s = 0, round = 0;
+    do {
+        pair<int, int> next_move = p[s].best_move(game, (round >= 20 ? 3 : 2));
+        game.move(next_move.first, next_move.second);
+        s ^= 1;
+        round++;
+    } while (!game.finish);
+    if (game.get_winner() == 1) p1.win++, p2.lose++;
+    else if (game.get_winner() == -1) p2.win++, p1.lose++;
+    else p1.draw++, p2.draw++;
+}
+
+Player generate_child(Player &p1, Player &p2) {
+    Player par[2] = {p1, p2};
+    Player ch;
+    {
+        int choose = rint(0, 1);
+        ch.line_cnt[0] = par[choose].line_cnt[0];
+        ch.line_cnt[1] = par[choose].line_cnt[1];
+        ch.ready_rate[0] = par[choose].ready_rate[0];
+        ch.ready_rate[1] = par[choose].ready_rate[1];
+        ch.ready_rate[2] = par[choose].ready_rate[2];
+    }
+    {
+        int choose = rint(0, 1);
+        ch.occupy = par[choose].occupy;
+    }
+    {
+        int choose = rint(0, 1);
+        ch.s_op_rate[0] = par[choose].s_op_rate[0];
+        ch.s_op_rate[1] = par[choose].s_op_rate[1];
+    }
+    {
+        int choose = rint(0, 1);
+        ch.next_now_rate[0] = par[choose].next_now_rate[0];
+        ch.next_now_rate[1] = par[choose].next_now_rate[1];
+    }
+    {
+        int choose = rint(0, 1);
+        for (int i = 0; i < 8; ++i) {
+            ch.omega[i] = par[choose].omega[i];
+        }
+    }
+    {
+        int choose = rint(0, 1);
+        ch.alpha = par[choose].alpha;
+    }
+    // mutation
+    if (rint(0, 999) <= 20) {
+        double a[4];
+        for (int i = 0; i < 4; ++i) a[i] = rdouble(rng);
+        sort(a, a + 4);
+        ch.line_cnt[0] = a[0];
+        ch.line_cnt[1] = a[1];
+        ch.ready_rate[0] = 0;
+        ch.ready_rate[1] = a[2];
+        ch.ready_rate[2] = a[3];
+    }
+    if (rint(0, 999) <= 20) {
+        ch.occupy = rdouble(rng) + 1;
+    }
+    if (rint(0, 999) <= 20) {
+        ch.s_op_rate[0] = rdouble(rng);
+        ch.s_op_rate[1] = 1.0 - ch.s_op_rate[0];
+    }
+    if (rint(0, 999) <= 20) {
+        ch.next_now_rate[0] = rdouble(rng) / 2;
+        ch.next_now_rate[1] = 1.0 - ch.next_now_rate[0];
+    }
+    if (rint(0, 999) <= 20) {
+        ch.omega[0] = 1;
+        ch.omega[1] = rdouble(rng);
+        for (int i = 2; i < 8; ++i) ch.omega[i] = ch.omega[i - 1] * ch.omega[1];
+    }
+    if (rint(0, 999) <= 20) {
+        ch.alpha = rdouble(rng) + 1;
+    }
+    return ch;
+}
+
+double tt;
+
+void evolution (vector<vector <Player>> &first, vector <vector <Player>> &second, int group, int population, int t) {
+    int choose_number = population / 10, retire_number = population / 10 * 3;
+    vector <int> id(group);
+    for (int i = 0; i < group; ++i) id[i] = i;
+    for (int _t = 1; _t <= t; ++_t) {
+        cout << "Start " << _t << endl;
+        shuffle(id.begin(), id.end(), rng);
+        for (int cur_id = 0; cur_id < group; ++cur_id) {
+            cout << "Matching " << cur_id << endl;
+            cout << "Now Time " << (clock() - tt) / 1000 << endl;
+            int firstid = cur_id, secondid = id[cur_id];
+            vector <Player> firstchild, secondchild;
+            for (int child_number = 0; child_number < retire_number; ++child_number) {
+                shuffle(first[firstid].begin(), first[firstid].end(), rng);
+                shuffle(second[secondid].begin(), second[secondid].end(), rng);
+                for (int i = 0; i < choose_number; ++i) {
+                    for (int j = 0; j < choose_number; ++j) {
+                        play(first[firstid][i], second[secondid][j]);
+                    }
+                }
+                // generate first child
+                sort(first[firstid].begin(), first[firstid].end());
+                firstchild.push_back(generate_child(first[firstid][0], first[firstid][1]));
+                // generate second child
+                sort(second[secondid].begin(), second[secondid].end());
+                secondchild.push_back(generate_child(second[secondid][0], second[secondid][1]));
+                for (int i = 0; i < choose_number; ++i) {
+                    first[firstid][i].reset();
+                    second[secondid][i].reset();
+                }
+            }
+            cout << "Finish child generation" << endl;
+            cout << "Now Time " << (clock() - tt) / 1000 << endl;
+            for (int i = 0; i < population; ++i) {
+                for (int j = 0; j < population; ++j) {
+                    play(first[firstid][i], second[secondid][j]);
+                }
+            }
+            // retire first bad gene
+            {
+                shuffle(first[firstid].begin(), first[firstid].end(), rng);
+                sort(first[firstid].begin(), first[firstid].end());
+                for (int i = 0; i < population; ++i) first[firstid][i].reset();
+                for (int i = 0; i < retire_number; ++i) first[firstid][population - 1 - i] = firstchild[i];
+            }
+            // retire second bad gene
+            {
+                shuffle(second[secondid].begin(), second[secondid].end(), rng);
+                sort(second[secondid].begin(), second[secondid].end());
+                for (int i = 0; i < population; ++i) second[secondid][i].reset();
+                for (int i = 0; i < retire_number; ++i) second[secondid][population - 1 - i] = secondchild[i];
+            }
+        }
+    }
 }
 
 int main() {
-    srand(time(NULL));
-    RenderWindow window(VideoMode(600, 760), "The Game!");
-
-    std::string image_root = "C:/Users/smw93/Desktop/big_tic_tac_toe/image";
-    Texture pi[15];
-    pi[0].loadFromFile(image_root + "/could_choose.png");
-    pi[1].loadFromFile(image_root + "/empty.png");
-    pi[2].loadFromFile(image_root + "/red.png");
-    pi[3].loadFromFile(image_root + "/blue.png");
-    pi[4].loadFromFile(image_root + "/empty_blue.png");
-    pi[5].loadFromFile(image_root + "/red_blue.png");
-    pi[6].loadFromFile(image_root + "/blue_blue.png");
-    pi[7].loadFromFile(image_root + "/empty_red.png");
-    pi[8].loadFromFile(image_root + "/red_red.png");
-    pi[9].loadFromFile(image_root + "/blue_red.png");
-    pi[10].loadFromFile(image_root + "/blue_word.png");
-    pi[11].loadFromFile(image_root + "/blue_win.png");
-    pi[12].loadFromFile(image_root + "/red_word.png");
-    pi[13].loadFromFile(image_root + "/red_win.png");
-    pi[14].loadFromFile(image_root + "/block.png");
-
-    Sprite picture[15];
-    for (int i = 0; i < 15; ++i) picture[i] = Sprite(pi[i]);
-
-    int w = 65, state = 0, round = 0;
-    Game game;
-    Player com;
-    freopen("com_value.txt", "r", stdin);
-    com.get_value_from_stdin();
+    int population = 60, number_of_change = 30, number_of_group = 3;
+    tt = clock();
     cout << fixed << setprecision(10);
-    cout << com << endl;
-
-    bool com_first = false;  // first or second
-    if (com_first) {
-        pair<int, int> next_move = com.best_move(game, 3);
-        game.move(next_move.first, next_move.second);
-        cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
-        round++;
-    }
-
-    while (window.isOpen()) {
-        Vector2i pos = Mouse::getPosition(window);
-
-        int x = pos.x / w;
-        int y = (pos.y - 160) / w;
-
-        Event e;
-        while (window.pollEvent(e)) {
-            if (e.type == Event::Closed) {
-                window.close();
-            }
-
-            if (!game.finish && e.type == Event::MouseButtonPressed) {
-                if (e.key.code == Mouse::Left) {
-                    if (x >= 0 && x < 9 && y >= 0 && y < 9 && game.move(x, y)) {
-                        cout << (!com_first ? "Red: " : "Blue: ") << x << ' ' << y << endl;
-                        round++;
-                        if (!game.finish)  {
-                            pair<int, int> next_move = com.best_move(game, 3);
-                            for (pair <int, int> i : game.valid_moves()) {
-                                cout << i.first << ' ' << i.second << ' ' << com.get_rating(game, i.first, i.second, 3) << endl;
-                            }
-                            cout << (!com_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
-                            game.move(next_move.first, next_move.second);
-                            round++;
-                        }
-                    }
-                }
-            }
-        }
-
-        window.clear(Color::White);
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                picture[14].setPosition(i * 3 * w + 5, j * 3 * w + 167);
-                window.draw(picture[14]);
-            }
-        }
-        if (game.finish) {
-            if (game.get_winner() == 1) {
-                if (state == 0) {
-                    picture[12].setPosition(2 * w, 0);
-                    window.draw(picture[12]);
-                } else {
-                    picture[13].setPosition(2 * w, 0);
-                    window.draw(picture[13]);
-                }
-            } else if (game.get_winner() == -1) {
-                if (state == 0) {
-                    picture[10].setPosition(2 * w, 0);
-                    window.draw(picture[10]);
-                } else {
-                    picture[11].setPosition(2 * w, 0);
-                    window.draw(picture[11]);
-                }
-            }
-        } else {
-            if (game.cur_player == 1) {
-                picture[12].setPosition(2 * w, 0);
-                window.draw(picture[12]);
-            } else {
-                picture[10].setPosition(2 * w, 0);
-                window.draw(picture[10]);
-            }
-        }
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                int id = game.get_output_picture(i, j);
-                picture[id].setPosition(i * w, j * w + 160);
-                window.draw(picture[id]);
-            }
-        }
-        window.display();
-        if (game.finish) {
-            wait(500);
-            state ^= 1;
+    freopen("output.txt", "w", stdout);
+    vector <vector <Player>> first(number_of_group), second(number_of_group);
+    for (int i = 0; i < number_of_group; ++i) {
+        for (int j = 0; j < population; ++j) {
+            first[i].push_back(Player());
+            second[i].push_back(Player());
         }
     }
-
-    return 0;
+    evolution(first, second, number_of_group, population, number_of_change);
+    cout << "Finished evolution" << endl;
+    cout << "Now Time " << (clock() - tt) / 1000 << endl;
+    for (int firstid = 0; firstid < number_of_group; ++firstid) {
+        for (int secondid = 0; secondid < number_of_group; ++secondid) {
+            for (int i = 0; i < population; ++i) {
+                for (int j = 0; j < population; ++j) {
+                    play(first[firstid][i], second[secondid][j]);
+                }
+            }
+        }
+    }
+    cout << "Finished!" << endl;
+    cout << "Time: " << (clock() - tt) / 1000 << endl;
+    cout << "Below are the genes:" << endl;
+    for (int firstid = 0; firstid < number_of_group; ++firstid) {
+        cout << "First Group " << firstid + 1 << endl;
+        sort(first[firstid].begin(), first[firstid].end());
+        for (Player &p : first[firstid]) cout << p << endl;
+    }
+    for (int secondid = 0; secondid < number_of_group; ++secondid) {
+        cout << "Second Group " << secondid + 1 << endl;
+        sort(second[secondid].begin(), second[secondid].end());
+        for (Player &p : second[secondid]) cout << p << endl;
+    }
 }

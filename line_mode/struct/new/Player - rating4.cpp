@@ -182,7 +182,7 @@ struct Player {
             }
         }
         double small_rating[3][3], ready_score = 0, line_score = 0;
-        vector <double> all_ready, all_line;
+        vector <double> all_line;
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
             small_rating[i][j] = get_small_rating(game, i, j, p);
         }
@@ -242,8 +242,9 @@ struct Player {
                 if (ready[i][j]) already = true;
                 if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already && !has_enemy) {
-                all_line.push_back(pow(alpha, sum / 3));
+            if (!already) {
+                if (has_enemy) all_line.push_back(0);
+                else all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // col
@@ -256,7 +257,8 @@ struct Player {
                 if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
             if (!already && !has_enemy) {
-                all_line.push_back(pow(alpha, sum / 3));
+                if (has_enemy) all_line.push_back(0);
+                else all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag1
@@ -269,7 +271,8 @@ struct Player {
                 if (game.small[i][i].winner == -p || game.small[i][i].finish) has_enemy = true;
             }
             if (!already && !has_enemy) {
-                all_line.push_back(pow(alpha, sum / 3));
+                if (has_enemy) all_line.push_back(0);
+                else all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag2
@@ -282,7 +285,8 @@ struct Player {
                 if (game.small[i][2 - i].winner == -p || game.small[i][2 - i].finish) has_enemy = true;
             }
             if (!already && !has_enemy) {
-                all_line.push_back(pow(alpha, sum / 3));
+                if (has_enemy) all_line.push_back(0);
+                else all_line.push_back(pow(alpha, sum / 3));
             }
         }
         if (!all_line.empty()) {
@@ -317,10 +321,27 @@ struct Player {
     void reset() {
         win = draw = lose = 0;
     }
+    double input_double() {
+        string s;
+        cin >> s;
+        double cur = 0, base = 1;
+        for (char &c : s) if (c != '.') {
+            cur += (c - '0') * base;
+            base /= 10;
+        }
+        return cur;
+    }
     void get_value_from_stdin() {
-        cin >> line_cnt[0] >> line_cnt[1] >> ready_rate[1] >> ready_rate[2];
+        line_cnt[0] = input_double();
+        line_cnt[1] = input_double();
+        ready_rate[1] = input_double();
+        ready_rate[2] = input_double();
         ready_rate[0] = 0;
-        cin >> occupy >> s_op_rate[0] >> next_now_rate[0] >> omega[1] >> alpha;
+        occupy = input_double();
+        s_op_rate[0] = input_double();
+        next_now_rate[0] = input_double();
+        omega[1] = input_double();
+        alpha = input_double();
         s_op_rate[1] = 1.0 - s_op_rate[0];
         next_now_rate[1] = 1.0 - next_now_rate[0];
         omega[0] = 1;
