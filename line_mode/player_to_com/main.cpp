@@ -4,7 +4,7 @@ using namespace sf;
 using namespace std;
 
 const int N = 3;
-const double INF = 1e9;
+const double INF = 1e9, eps = 1e-12;
 auto SEED = chrono::steady_clock::now().time_since_epoch().count();
 mt19937 rng(SEED);
 uniform_real_distribution<> rdouble(0.0, 1.0);
@@ -152,11 +152,14 @@ struct Player {
     double line_cnt[2], ready_rate[3], occupy, s_op_rate[2], next_now_rate[2], omega[8], alpha;
     int win = 0, draw = 0, lose = 0;
     Player() {
-        for (int i = 0; i < 2; ++i) line_cnt[i] = rdouble(rng) * 0.4;
-        if (line_cnt[0] > line_cnt[1]) swap(line_cnt[0], line_cnt[1]);
+        double a[4];
+        for (int i = 0; i < 4; ++i) a[i] = rdouble(rng);
+        sort(a, a + 4);
+        line_cnt[0] = a[0];
+        line_cnt[1] = a[1];
         ready_rate[0] = 0;
-        for (int i = 1; i < 3; ++i) ready_rate[i] = rdouble(rng) * 0.4 + 0.6;
-        if (ready_rate[1] > ready_rate[2]) swap(ready_rate[1], ready_rate[2]);
+        ready_rate[1] = a[2];
+        ready_rate[2] = a[3];
         occupy = rdouble(rng) + 1;
         s_op_rate[0] = rdouble(rng);
         s_op_rate[1] = 1.0 - s_op_rate[0];
@@ -173,7 +176,7 @@ struct Player {
         double best_score = -INF;
         for (pair<int, int> i : moves) {
             double score = get_rating(game, i.first, i.second, dep);
-            if (score > best_score)
+            if (score - best_score > eps)
                 best_score = score, best = i;
         }
         return best;
@@ -189,51 +192,51 @@ struct Player {
         bool ready[3][3];
         int ready_cnt = 0;
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-                ready[i][j] = false;
-                if (game.get_state(x, y, i, j) == 0) {
-                    {
-                        // row
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (j != k) {
-                                cnt += game.get_state(x, y, i, k);
-                            }
-                        if (cnt == p * 2) {
-                            ready[i][j] = true;
-                        }
+            ready[i][j] = false;
+            if (game.get_state(x, y, i, j) == 0) {
+                {
+                    // row
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (j != k) {
+                        cnt += game.get_state(x, y, i, k);
                     }
-                    {
-                        // col
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                cnt += game.get_state(x, y, k, j);
-                            }
-                        if (cnt == p * 2) {
-                            ready[i][j] = true;
-                        }
-                    }
-                    if (i == j) {
-                        // diag1
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                cnt += game.get_state(x, y, k, k);
-                            }
-                        if (cnt == p * 2) {
-                            ready[i][j] = true;
-                        }
-                    }
-                    if (i == 2 - j) {
-                        // diag2
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                cnt += game.get_state(x, y, k, 2 - k);
-                            }
-                        if (cnt == p * 2) {
-                            ready[i][j] = true;
-                        }
+                    if (cnt == p * 2) {
+                        ready[i][j] = true;
                     }
                 }
-                if (ready[i][j]) ready_cnt++;
+                {
+                    // col
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        cnt += game.get_state(x, y, k, j);
+                    }
+                    if (cnt == p * 2) {
+                        ready[i][j] = true;
+                    }
+                }
+                if (i == j) {
+                    // diag1
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        cnt += game.get_state(x, y, k, k);
+                    }
+                    if (cnt == p * 2) {
+                        ready[i][j] = true;
+                    }
+                }
+                if (i == 2 - j) {
+                    // diag2
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        cnt += game.get_state(x, y, k, 2 - k);
+                    }
+                    if (cnt == p * 2) {
+                        ready[i][j] = true;
+                    }
+                }
             }
+            if (ready[i][j]) ready_cnt++;
+        }
         double ready_score = ready_rate[min(ready_cnt, 2)], line_score = 0;
         vector <double> all_line;
         // row
@@ -308,21 +311,21 @@ struct Player {
             sort(all_line.rbegin(), all_line.rend());
             double base = 0;
             for (int i = 0; i < all_line.size(); ++i) {
-                line_score += all_line[i] * omega[i + 7 - all_line.size()];
+                line_score += all_line[i] * omega[i];
                 base += omega[i];
             }
             line_score /= base;
         }
         return (ready_score + line_score) / 2;
     }
-    double get_small_rating(Game game, int x, int y) {
-        return get_small_attack_rating(game, x, y, game.cur_player) * s_op_rate[0] - get_small_attack_rating(game, x, y, -game.cur_player) * s_op_rate[1];
+    double get_small_rating(Game game, int x, int y, int p) {
+        return get_small_attack_rating(game, x, y, p) * s_op_rate[0] - get_small_attack_rating(game, x, y, -p) * s_op_rate[1];
     }
-    double get_big_rating(Game game) {
+    double get_big_rating(Game game, int p) {
         if (game.finish) {
-            if (game.get_winner() == game.cur_player) {
+            if (game.get_winner() == p) {
                 return INF;
-            } else if (game.get_winner() == -game.cur_player) {
+            } else if (game.get_winner() == -p) {
                 return -INF;
             } else {
                 return 0;
@@ -331,109 +334,104 @@ struct Player {
         double small_rating[3][3], ready_score = 0, line_score = 0;
         vector <double> all_ready, all_line;
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-                small_rating[i][j] = get_small_rating(game, i, j);
-            }
+            small_rating[i][j] = get_small_rating(game, i, j, p);
+        }
         bool ready[3][3];
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-                ready[i][j] = false;
-                if (!game.small[i][j].finish) {
-                    {
-                        // row
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (j != k) {
-                                if (game.small[i][k].winner == game.cur_player) cnt++;
-                            }
-                        if (cnt == 2) {
-                            ready[i][j] = true;
-                        }
+            ready[i][j] = false;
+            if (!game.small[i][j].finish) {
+                {
+                    // row
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (j != k) {
+                        if (game.small[i][k].winner == p) cnt++;
                     }
-                    {
-                        // col
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                if (game.small[k][j].winner == game.cur_player) cnt++;
-                            }
-                        if (cnt == 2) {
-                            ready[i][j] = true;
-                        }
-                    }
-                    if (i == j) {
-                        // diag1
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                if (game.small[k][k].winner == game.cur_player) cnt++;
-                            }
-                        if (cnt == 2) {
-                            ready[i][j] = true;
-                        }
-                    }
-                    if (i == 2 - j) {
-                        // diag2
-                        int cnt = 0;
-                        for (int k = 0; k < 3; ++k) if (i != k) {
-                                if (game.small[k][2 - k].winner == game.cur_player) cnt++;
-                            }
-                        if (cnt == 2) {
-                            ready[i][j] = true;
-                        }
+                    if (cnt == 2) {
+                        ready[i][j] = true;
                     }
                 }
-                if (ready[i][j]) all_ready.push_back(pow(alpha, small_rating[i][j]));
+                {
+                    // col
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        if (game.small[k][j].winner == p) cnt++;
+                    }
+                    if (cnt == 2) {
+                        ready[i][j] = true;
+                    }
+                }
+                if (i == j) {
+                    // diag1
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        if (game.small[k][k].winner == p) cnt++;
+                    }
+                    if (cnt == 2) {
+                        ready[i][j] = true;
+                    }
+                }
+                if (i == 2 - j) {
+                    // diag2
+                    int cnt = 0;
+                    for (int k = 0; k < 3; ++k) if (i != k) {
+                        if (game.small[k][2 - k].winner == p) cnt++;
+                    }
+                    if (cnt == 2) {
+                        ready[i][j] = true;
+                    }
+                }
             }
-        if (!all_ready.empty()) {
-            sort(all_ready.rbegin(), all_ready.rend());
-            double base = 0;
-            for (int i = 0; i < all_ready.size(); ++i) {
-                ready_score += all_ready[i] * omega[i + 7 - all_ready.size()];
-                base += omega[i];
-            }
-            ready_score /= base;
+            if (ready[i][j]) ready_score += pow(alpha, small_rating[i][j]);
         }
         // row
         for (int i = 0; i < 3; ++i) {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int j = 0; j < 3; ++j) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
+                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // col
         for (int j = 0; j < 3; ++j) {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
+                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag1
         {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][i];
                 if (ready[i][i]) already = true;
+                if (game.small[i][i].winner == -p || game.small[i][i].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag2
         {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][2 - i];
                 if (ready[i][2 - i]) already = true;
+                if (game.small[i][2 - i].winner == -p || game.small[i][2 - i].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
@@ -441,7 +439,7 @@ struct Player {
             sort(all_line.rbegin(), all_line.rend());
             double base = 0;
             for (int i = 0; i < all_line.size(); ++i) {
-                line_score += all_line[i] * omega[i + 7 - all_line.size()];
+                line_score += all_line[i] * omega[i];
                 base += omega[i];
             }
             line_score /= base;
@@ -450,7 +448,8 @@ struct Player {
     }
     double get_rating(Game game, int x, int y, int dep) {
         if (dep == 0) return 0;
-        double rat_s = -get_big_rating(game), rat_op;
+        int p = game.cur_player;
+        double rat_s = -get_big_rating(game, p), rat_op;
         game.move(x, y);
         // check whether the move could win
         if (game.finish) {
@@ -460,7 +459,7 @@ struct Player {
                 return 0;
             }
         }
-        rat_s += get_big_rating(game);
+        rat_s += get_big_rating(game, p);
         pair<int, int> op_best = best_move(game, dep - 1);
         rat_op = get_rating(game, op_best.first, op_best.second, dep - 1);
         return rat_s * next_now_rate[1] - rat_op * next_now_rate[0];
@@ -479,8 +478,8 @@ struct Player {
     }
     friend ostream &operator<<(ostream &o, Player &p) {
         return o << p.line_cnt[0] << ' ' << p.line_cnt[1] << ' ' << p.ready_rate[1] << ' ' << p.ready_rate[2] << ' '
-                 << p.occupy << ' ' << p.s_op_rate[0] << ' ' << p.next_now_rate[0] << ' ' << p.omega[1] << ' ' << p.alpha
-                 << " Score " << p.win * 3 + p.draw << ' ' << p.win << "W " << p.draw << "D " << p.lose << "L";
+        << p.occupy << ' ' << p.s_op_rate[0] << ' ' << p.next_now_rate[0] << ' ' << p.omega[1] << ' ' << p.alpha
+        << " Score " << p.win * 3 + p.draw << ' ' << p.win << "W " << p.draw << "D " << p.lose << "L";
     }
     bool operator < (const Player &other) const {
         return win * 3 + draw > other.win * 3 + other.draw;
@@ -522,11 +521,14 @@ int main() {
     Player com;
     freopen("com_value.txt", "r", stdin);
     com.get_value_from_stdin();
+    com.s_op_rate[0] = 0.8;
+    com.s_op_rate[1] = 0.2;
+    cout << fixed << setprecision(10);
     cout << com << endl;
 
     bool com_first = true;  // first or second
     if (com_first) {
-        pair<int, int> next_move = com.best_move(game, 2);
+        pair<int, int> next_move = com.best_move(game, 3);
         game.move(next_move.first, next_move.second);
         cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
         round++;
@@ -550,7 +552,10 @@ int main() {
                         cout << (!com_first ? "Red: " : "Blue: ") << x << ' ' << y << endl;
                         round++;
                         if (!game.finish)  {
-                            pair<int, int> next_move = com.best_move(game, (round >= 20 ? 3 : 2));
+                            pair<int, int> next_move = com.best_move(game, 3);
+                            for (pair <int, int> i : game.valid_moves()) {
+                                cout << i.first << ' ' << i.second << ' ' << com.get_rating(game, i.first, i.second, 3) << endl;
+                            }
                             cout << (!com_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
                             game.move(next_move.first, next_move.second);
                             round++;

@@ -26,7 +26,7 @@ struct Player {
         double best_score = -INF;
         for (pair<int, int> i : moves) {
             double score = get_rating(game, i.first, i.second, dep);
-            if (score > best_score)
+            if (score - best_score > eps)
                 best_score = score, best = i;
         }
         return best;
@@ -168,14 +168,14 @@ struct Player {
         }
         return (ready_score + line_score) / 2;
     }
-    double get_small_rating(Game game, int x, int y) {
-        return get_small_attack_rating(game, x, y, game.cur_player) * s_op_rate[0] - get_small_attack_rating(game, x, y, -game.cur_player) * s_op_rate[1];
+    double get_small_rating(Game game, int x, int y, int p) {
+        return get_small_attack_rating(game, x, y, p) * s_op_rate[0] - get_small_attack_rating(game, x, y, -p) * s_op_rate[1];
     }
-    double get_big_rating(Game game) {
+    double get_big_rating(Game game, int p) {
         if (game.finish) {
-            if (game.get_winner() == game.cur_player) {
+            if (game.get_winner() == p) {
                 return INF;
-            } else if (game.get_winner() == -game.cur_player) {
+            } else if (game.get_winner() == -p) {
                 return -INF;
             } else {
                 return 0;
@@ -184,7 +184,7 @@ struct Player {
         double small_rating[3][3], ready_score = 0, line_score = 0;
         vector <double> all_ready, all_line;
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-            small_rating[i][j] = get_small_rating(game, i, j);
+            small_rating[i][j] = get_small_rating(game, i, j, p);
         }
         bool ready[3][3];
         for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
@@ -194,7 +194,7 @@ struct Player {
                     // row
                     int cnt = 0;
                     for (int k = 0; k < 3; ++k) if (j != k) {
-                        if (game.small[i][k].winner == game.cur_player) cnt++;
+                        if (game.small[i][k].winner == p) cnt++;
                     }
                     if (cnt == 2) {
                         ready[i][j] = true;
@@ -204,7 +204,7 @@ struct Player {
                     // col
                     int cnt = 0;
                     for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][j].winner == game.cur_player) cnt++;
+                        if (game.small[k][j].winner == p) cnt++;
                     }
                     if (cnt == 2) {
                         ready[i][j] = true;
@@ -214,7 +214,7 @@ struct Player {
                     // diag1
                     int cnt = 0;
                     for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][k].winner == game.cur_player) cnt++;
+                        if (game.small[k][k].winner == p) cnt++;
                     }
                     if (cnt == 2) {
                         ready[i][j] = true;
@@ -224,69 +224,64 @@ struct Player {
                     // diag2
                     int cnt = 0;
                     for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][2 - k].winner == game.cur_player) cnt++;
+                        if (game.small[k][2 - k].winner == p) cnt++;
                     }
                     if (cnt == 2) {
                         ready[i][j] = true;
                     }
                 }
             }
-            if (ready[i][j]) all_ready.push_back(pow(alpha, small_rating[i][j]));
-        }
-        if (!all_ready.empty()) {
-            sort(all_ready.rbegin(), all_ready.rend());
-            double base = 0;
-            for (int i = 0; i < all_ready.size(); ++i) {
-                ready_score += all_ready[i] * omega[i];
-                base += omega[i];
-            }
-            ready_score /= base;
+            if (ready[i][j]) ready_score += pow(alpha, small_rating[i][j]);
         }
         // row
         for (int i = 0; i < 3; ++i) {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int j = 0; j < 3; ++j) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
+                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // col
         for (int j = 0; j < 3; ++j) {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
+                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag1
         {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][i];
                 if (ready[i][i]) already = true;
+                if (game.small[i][i].winner == -p || game.small[i][i].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
         // diag2
         {
             double sum = 0;
-            bool already = false;
+            bool has_enemy = false, already = false;
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][2 - i];
                 if (ready[i][2 - i]) already = true;
+                if (game.small[i][2 - i].winner == -p || game.small[i][2 - i].finish) has_enemy = true;
             }
-            if (!already) {
+            if (!already && !has_enemy) {
                 all_line.push_back(pow(alpha, sum / 3));
             }
         }
@@ -303,7 +298,8 @@ struct Player {
     }
     double get_rating(Game game, int x, int y, int dep) {
         if (dep == 0) return 0;
-        double rat_s = -get_big_rating(game), rat_op;
+        int p = game.cur_player;
+        double rat_s = -get_big_rating(game, p), rat_op;
         game.move(x, y);
         // check whether the move could win
         if (game.finish) {
@@ -313,7 +309,7 @@ struct Player {
                 return 0;
             }
         }
-        rat_s += get_big_rating(game);
+        rat_s += get_big_rating(game, p);
         pair<int, int> op_best = best_move(game, dep - 1);
         rat_op = get_rating(game, op_best.first, op_best.second, dep - 1);
         return rat_s * next_now_rate[1] - rat_op * next_now_rate[0];

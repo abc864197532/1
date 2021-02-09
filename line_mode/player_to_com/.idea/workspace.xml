@@ -12,64 +12,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc79e45f-e951-48ed-9cbe-e863138e66cc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../evolution/.idea/evolution.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/CMakeLists.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeCache.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeCXXCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeRCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CMakeSystem.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdC/a.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/3.17.3/CompilerIdCXX/a.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/cmake.check_cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/CXX.includecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/DependInfo.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/build.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/cmake_clean.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/depend.internal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/flags.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/link.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/linklibs.rsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/main.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/objects.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/objects1.rsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/evolution.dir/progress.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/evolution.cbp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/evolution.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/cmake-build-debug/output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../evolution/main.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/com_value.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/com_value.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/player_to_com.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/player_to_com.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../result/rating-big-update-info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../result/rating-big-update-info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Evolution - groups.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Evolution - single.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Game.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Player - rating1.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Player - rating2.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../struct/Table.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../struct/new/Player - rating4.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../struct/new/Player - rating4.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +73,9 @@
       <workItem from="1607045776457" duration="4256000" />
       <workItem from="1610076216732" duration="4000" />
       <workItem from="1612500885967" duration="7498000" />
-      <workItem from="1612769559084" duration="4942000" />
+      <workItem from="1612769559084" duration="9077000" />
+      <workItem from="1612856225715" duration="6734000" />
+      <workItem from="1612882403189" duration="71000" />
     </task>
     <servers />
   </component>
@@ -132,21 +83,25 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1612789380164">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1612882222208">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1612789380164" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1612789380163">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1612882222208" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1612882222208">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1612789380163" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1612789380163">
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1612882222208" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1612882222208">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1612789380163" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1612789380164">
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1612882222208" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1612882222208">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1612789380164" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1612882222208" />
+    <state x="431" y="145" key="search.everywhere.popup" timestamp="1612872330067">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1612872330067" />
   </component>
 </project>
