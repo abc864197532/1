@@ -545,7 +545,7 @@ int main() {
     cout << fixed << setprecision(10);
     cout << com << endl;
 
-    bool com_first = false;  // first or second
+    bool com_first = true;  // first or second
     if (com_first) {
         pair<int, int> next_move = com.best_move(game, 3);
         game.move(next_move.first, next_move.second);

@@ -405,7 +405,7 @@ struct Player {
                 if (ready[i][j]) already = true;
                 if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
             }
-            if (!already && !has_enemy) {
+            if (!already) {
                 if (has_enemy) all_line.push_back(0);
                 else all_line.push_back(pow(alpha, sum / 3));
             }
@@ -419,7 +419,7 @@ struct Player {
                 if (ready[i][i]) already = true;
                 if (game.small[i][i].winner == -p || game.small[i][i].finish) has_enemy = true;
             }
-            if (!already && !has_enemy) {
+            if (!already) {
                 if (has_enemy) all_line.push_back(0);
                 else all_line.push_back(pow(alpha, sum / 3));
             }
@@ -433,7 +433,7 @@ struct Player {
                 if (ready[i][2 - i]) already = true;
                 if (game.small[i][2 - i].winner == -p || game.small[i][2 - i].finish) has_enemy = true;
             }
-            if (!already && !has_enemy) {
+            if (!already) {
                 if (has_enemy) all_line.push_back(0);
                 else all_line.push_back(pow(alpha, sum / 3));
             }
