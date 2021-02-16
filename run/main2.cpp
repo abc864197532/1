@@ -389,7 +389,7 @@ struct Player {
             for (int j = 0; j < 3; ++j) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
-                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
+                if (game.small[i][j].winner != p && game.small[i][j].finish) has_enemy = true;
             }
             if (!already) {
                 if (has_enemy) all_line.push_back(0);
@@ -403,7 +403,7 @@ struct Player {
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][j];
                 if (ready[i][j]) already = true;
-                if (game.small[i][j].winner == -p || game.small[i][j].finish) has_enemy = true;
+                if (game.small[i][j].winner != p && game.small[i][j].finish) has_enemy = true;
             }
             if (!already) {
                 if (has_enemy) all_line.push_back(0);
@@ -417,7 +417,7 @@ struct Player {
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][i];
                 if (ready[i][i]) already = true;
-                if (game.small[i][i].winner == -p || game.small[i][i].finish) has_enemy = true;
+                if (game.small[i][i].winner != p && game.small[i][i].finish) has_enemy = true;
             }
             if (!already) {
                 if (has_enemy) all_line.push_back(0);
@@ -431,7 +431,7 @@ struct Player {
             for (int i = 0; i < 3; ++i) {
                 sum += small_rating[i][2 - i];
                 if (ready[i][2 - i]) already = true;
-                if (game.small[i][2 - i].winner == -p || game.small[i][2 - i].finish) has_enemy = true;
+                if (game.small[i][2 - i].winner != p && game.small[i][2 - i].finish) has_enemy = true;
             }
             if (!already) {
                 if (has_enemy) all_line.push_back(0);
