@@ -12,6 +12,7 @@ struct Player {
     }
     pair<int, int> best_move(Game game, int dep) {
         vector<pair<int, int>> moves = game.valid_moves();
+        shuffle(moves.begin(), moves.end(), rng);
         pair<int, int> best = moves.front();
         double best_score = -INF;
         for (pair<int, int> i : moves) {

@@ -171,6 +171,7 @@ struct Player {
     }
     pair<int, int> best_move(Game game, int dep) {
         vector<pair<int, int>> moves = game.valid_moves();
+        shuffle(moves.begin(), moves.end(), rng);
         pair<int, int> best = moves.front();
         double best_score = -INF;
         for (pair<int, int> i : moves) {
@@ -651,7 +652,7 @@ int main() {
     int population = 150, number_of_change = 30, number_of_group = 6;
     tt = clock();
     cout << fixed << setprecision(10);
-    freopen("output - 150 6 (1).txt", "w", stdout);
+    freopen("output - 150 6 (2).txt", "w", stdout);
     vector <vector <Player>> first(number_of_group), second(number_of_group);
     for (int i = 0; i < number_of_group; ++i) {
         for (int j = 0; j < population; ++j) {
