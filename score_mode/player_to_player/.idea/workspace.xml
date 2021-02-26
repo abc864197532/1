@@ -29,7 +29,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1202cf10-1b70-47f2-aad5-e0150cf36919" name="Default Changelist" comment="" />
+    <list default="true" id="1202cf10-1b70-47f2-aad5-e0150cf36919" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/com_value.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/com_value.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/player_to_com.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/cmake-build-debug/player_to_com.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../line_mode/player_to_com/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../line_mode/player_to_com/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/score_mode.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,6 +94,8 @@
       <workItem from="1606499507654" duration="79000" />
       <workItem from="1607245110275" duration="389000" />
       <workItem from="1607521536601" duration="574000" />
+      <workItem from="1614310697154" duration="22000" />
+      <workItem from="1614316990049" duration="1900000" />
     </task>
     <servers />
   </component>
@@ -100,21 +115,21 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1607522118928">
+    <state width="1537" height="217" key="GridCell.Tab.0.bottom" timestamp="1614318909926">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607522118928" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1607522118928">
+    <state width="1537" height="217" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1614318909926" />
+    <state width="1537" height="217" key="GridCell.Tab.0.center" timestamp="1614318909926">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607522118928" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1607522118928">
+    <state width="1537" height="217" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1614318909926" />
+    <state width="1537" height="217" key="GridCell.Tab.0.left" timestamp="1614318909926">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607522118928" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1607522118928">
+    <state width="1537" height="217" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1614318909926" />
+    <state width="1537" height="217" key="GridCell.Tab.0.right" timestamp="1614318909926">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607522118928" />
+    <state width="1537" height="217" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1614318909926" />
   </component>
 </project>

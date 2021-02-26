@@ -2,79 +2,57 @@
 #include <bits/stdc++.h>
 using namespace sf;
 
-const int N = 3;
-
 // -1 O 0 empty 1 X
 struct Table {
-    int state[N][N], blue_score, red_score, empty_cell;
+    int state[3][3], blue_score, red_score, empty_cell;
     bool finish;
 
-    Table () { // init
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
+    Table () : blue_score(0), red_score(0), empty_cell(9), finish(false) { // init
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
                 state[i][j] = 0;
             }
         }
-        blue_score = 0;
-        red_score = 0;
-        empty_cell = N * N;
-        finish = false;
     }
 
     void update_score() {
-        int row[N] = {}, col[N] = {}, diag[2] = {};
-        red_score = 0;
-        blue_score = 0;
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
+        int row[3] = {}, col[3] = {}, diag[2] = {};
+        red_score = blue_score = 0;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
                 row[i] += state[i][j];
                 col[j] += state[i][j];
             }
             diag[0] += state[i][i];
-            diag[1] += state[i][N - i - 1];
+            diag[1] += state[i][2 - i];
         }
-        for (int i = 0; i < N; ++i) {
-            if (row[i] == N) {
+        for (int i = 0; i < 3; ++i) {
+            if (row[i] == 3) {
                 red_score++;
             }
-            if (row[i] == -N) {
+            if (row[i] == -3) {
                 blue_score++;
             }
-            if (col[i] == N) {
+            if (col[i] == 3) {
                 red_score++;
             }
-            if (col[i] == -N) {
+            if (col[i] == -3) {
                 blue_score++;
             }
         }
         for (int i = 0; i < 2; ++i) {
-            if (diag[i] == N) {
+            if (diag[i] == 3) {
                 red_score++;
             }
-            if (diag[i] == -N) {
+            if (diag[i] == -3) {
                 blue_score++;
             }
         }
-    }
-
-    bool Finish() {
-        return empty_cell == 0;
+        finish = empty_cell == 0;
     }
 
     bool isEmpty(int x, int y) {
         return state[x][y] == 0;
-    }
-
-    int Get_Red_Score() {
-        return red_score;
-    }
-
-    int Get_Blue_Score() {
-        return blue_score;
-    }
-
-    int get_state(int x, int y) {
-        return state[x][y];
     }
 
     bool move(int x, int y, int p) { // p -> player
@@ -89,16 +67,16 @@ struct Table {
 };
 
 struct Game {
-    Table small[N][N];
-    int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_cell = N * N * N * N;
+    Table small[3][3];
+    int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_cell = 81;
     int red_score = 0, blue_score = 0;
-    bool could_choose_all = true;
+    bool could_choose_all = true, finish = false;
 
     bool valid(int x, int y) {
-        if (!small[x / N][y / N].isEmpty(x % N, y % N)) {
+        if (!small[x / 3][y / 3].isEmpty(x % 3, y % 3)) {
             return false;
         }
-        if (could_choose_all || (last_move_x == x / N && last_move_y == y / N)) {
+        if (could_choose_all || (last_move_x == x / 3 && last_move_y == y / 3)) {
             return true;
         }
         return false;
@@ -107,71 +85,57 @@ struct Game {
     void update_score() {
         red_score = 0;
         blue_score = 0;
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
-                red_score += small[i][j].Get_Red_Score();
-                blue_score += small[i][j].Get_Blue_Score();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                red_score += small[i][j].red_score;
+                blue_score += small[i][j].blue_score;
             }
         }
+        finish = empty_cell == 0;
     }
 
     bool move(int x, int y) {
         if (!valid(x, y)) {
             return false;
         }
-        small[x / N][y / N].move(x % N,y % N, cur_player);
-        small[x / N][y / N].update_score();
-        update_score();
+        small[x / 3][y / 3].move(x % 3,y % 3, cur_player);
+        small[x / 3][y / 3].update_score();
         empty_cell--;
-        last_move_x = x % N;
-        last_move_y = y % N;
+        update_score();
+        last_move_x = x % 3;
+        last_move_y = y % 3;
         cur_player = -cur_player;
         could_choose_all = false;
-        if (small[last_move_x][last_move_y].Finish()) {
+        if (small[last_move_x][last_move_y].finish) {
             could_choose_all = true;
         }
         return true;
     }
 
-    bool Finish() {
-        return empty_cell == 0;
-    }
-
-    int Winner() {
+    int get_winner() {
         if (red_score > blue_score) return 1;
         if (red_score < blue_score) return -1;
         return 0;
     }
 
-    int Player() {
-        return cur_player;
-    }
-
-    int Get_Red_Score() {
-        return red_score;
-    }
-
-    int Get_Blue_Score() {
-        return blue_score;
+    int get_state(int x, int y, int i, int j) {
+        return small[x][y].state[i][j];
     }
 
     int get_output_picture(int x, int y) {
-        if (small[x / N][y / N].get_state(x % N, y % N) == 1) {
+        int p = get_state(x / 3, y / 3, x % 3, y % 3);
+        if (p == 1) {
             return 2;
         }
-        if (small[x / N][y / N].get_state(x % N, y % N) == -1) {
+        if (p == -1) {
             return 3;
         }
-        if (!Finish() && valid(x, y)) {
+        if (!finish && valid(x, y)) {
             return 0;
         }
         return 1;
     }
 };
-
-int get_random() {
-    return rand() % 9;
-}
 
 void wait(int time) {
     double t = clock();
@@ -218,9 +182,9 @@ int main() {
                 window.close();
             }
 
-            if (!game.Finish() && e.type == Event::MouseButtonPressed) {
+            if (!game.finish && e.type == Event::MouseButtonPressed) {
                 if (e.key.code == Mouse::Left) {
-                    if (x >= 0 && x < N * N && y >= 0 && y < N * N) {
+                    if (x >= 0 && x < 9 && y >= 0 && y < 9) {
                         game.move(x, y);
                     }
                 }
@@ -234,7 +198,7 @@ int main() {
                 window.draw(picture[8]);
             }
         }
-        int red_score = game.Get_Red_Score(), blue_score = game.Get_Blue_Score();
+        int red_score = game.red_score, blue_score = game.blue_score;
         red_digit[red_score / 10].setPosition(0, 0);
         window.draw(red_digit[red_score / 10]);
         red_digit[red_score % 10].setPosition(w, 0);
@@ -243,8 +207,8 @@ int main() {
         window.draw(blue_digit[blue_score / 10]);
         blue_digit[blue_score % 10].setPosition(8 * w, 0);
         window.draw(blue_digit[blue_score % 10]);
-        if (game.Finish()) {
-            if (game.Winner() == 1) {
+        if (game.finish) {
+            if (game.get_winner() == 1) {
                 if (state == 0) {
                     picture[6].setPosition(2 * w, 0);
                     window.draw(picture[6]);
@@ -262,7 +226,7 @@ int main() {
                 }
             }
         } else {
-            if (game.Player() == 1) {
+            if (game.cur_player == 1) {
                 picture[6].setPosition(2 * w, 0);
                 window.draw(picture[6]);
             } else {
@@ -270,15 +234,15 @@ int main() {
                 window.draw(picture[4]);
             }
         }
-        for (int i = 0; i < N * N; ++i) {
-            for (int j = 0; j < N * N; ++j) {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
                 int id = game.get_output_picture(i, j);
                 picture[id].setPosition(i * w, j * w + 160);
                 window.draw(picture[id]);
             }
         }
         window.display();
-        if (game.Finish()) {
+        if (game.finish) {
             wait(500);
             state ^= 1;
         }

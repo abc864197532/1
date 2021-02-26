@@ -15,7 +15,15 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/main.cpp.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/player_to_com.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/com_value.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/com_value.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/player_to_com.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/player_to_com.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/.idea/score_mode.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/player_to_player/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../score_mode/player_to_player/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../score_mode/player_to_player/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../score_mode/player_to_player/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,11 +47,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="player_to_com" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="player_to_com" TARGET_NAME="player_to_com" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="player_to_com" RUN_TARGET_NAME="player_to_com">
@@ -76,6 +85,7 @@
       <workItem from="1612887184279" duration="387000" />
       <workItem from="1613391569508" duration="580000" />
       <workItem from="1613713675582" duration="363000" />
+      <workItem from="1614302863188" duration="8839000" />
     </task>
     <servers />
   </component>
@@ -83,22 +93,22 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1613714043486">
+    <state width="1537" height="217" key="GridCell.Tab.0.bottom" timestamp="1614317527962">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1613714043486" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1613714043485">
+    <state width="1537" height="217" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1614317527962" />
+    <state width="1537" height="217" key="GridCell.Tab.0.center" timestamp="1614317527962">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1613714043485" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1613714043484">
+    <state width="1537" height="217" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1614317527962" />
+    <state width="1537" height="217" key="GridCell.Tab.0.left" timestamp="1614317527962">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1613714043484" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1613714043486">
+    <state width="1537" height="217" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1614317527962" />
+    <state width="1537" height="217" key="GridCell.Tab.0.right" timestamp="1614317527962">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1613714043486" />
+    <state width="1537" height="217" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1614317527962" />
     <state x="431" y="145" key="search.everywhere.popup" timestamp="1612872330067">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

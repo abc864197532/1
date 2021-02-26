@@ -3,7 +3,6 @@
 using namespace sf;
 using namespace std;
 
-const int N = 3;
 const double INF = 1e9, eps = 1e-12;
 auto SEED = chrono::steady_clock::now().time_since_epoch().count();
 mt19937 rng(SEED);
@@ -507,9 +506,13 @@ struct Player {
     }
 };
 
+bool waiting = false;
+
 void wait(int time) {
+    waiting = true;
     double t = clock();
     while (clock() - t < time);
+    waiting = false;
 }
 
 int main() {
@@ -545,45 +548,7 @@ int main() {
     cout << fixed << setprecision(10);
     cout << com << endl;
 
-    bool com_first = true;  // first or second
-    if (com_first) {
-        pair<int, int> next_move = com.best_move(game, 3);
-        game.move(next_move.first, next_move.second);
-        cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
-        round++;
-    }
-
-    while (window.isOpen()) {
-        Vector2i pos = Mouse::getPosition(window);
-
-        int x = pos.x / w;
-        int y = (pos.y - 160) / w;
-
-        Event e;
-        while (window.pollEvent(e)) {
-            if (e.type == Event::Closed) {
-                window.close();
-            }
-
-            if (!game.finish && e.type == Event::MouseButtonPressed) {
-                if (e.key.code == Mouse::Left) {
-                    if (x >= 0 && x < 9 && y >= 0 && y < 9 && game.move(x, y)) {
-                        cout << (!com_first ? "Red: " : "Blue: ") << x << ' ' << y << endl;
-                        round++;
-                        if (!game.finish)  {
-                            pair<int, int> next_move = com.best_move(game, 3);
-                            for (pair <int, int> i : game.valid_moves()) {
-                                cout << i.first << ' ' << i.second << ' ' << com.get_rating(game, i.first, i.second, 3) << endl;
-                            }
-                            cout << (!com_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
-                            game.move(next_move.first, next_move.second);
-                            round++;
-                        }
-                    }
-                }
-            }
-        }
-
+    function<void()> draw = [&]() {
         window.clear(Color::White);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -626,6 +591,46 @@ int main() {
             }
         }
         window.display();
+    };
+
+    bool com_first = true;  // first or second
+    if (com_first) {
+        pair<int, int> next_move = com.best_move(game, 3);
+        game.move(next_move.first, next_move.second);
+        cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
+        round++;
+    }
+
+    while (window.isOpen()) {
+        Vector2i pos = Mouse::getPosition(window);
+
+        int x = pos.x / w;
+        int y = (pos.y - 160) / w;
+
+        Event e;
+        while (window.pollEvent(e)) {
+            if (e.type == Event::Closed) {
+                window.close();
+            }
+
+            if (!waiting && !game.finish && e.type == Event::MouseButtonPressed) {
+                if (e.key.code == Mouse::Left) {
+                    if (x >= 0 && x < 9 && y >= 0 && y < 9 && game.move(x, y)) {
+                        cout << (!com_first ? "Red: " : "Blue: ") << x << ' ' << y << endl;
+                        round++;
+                        draw();
+                        if (!game.finish)  {
+                            wait(500);
+                            pair<int, int> next_move = com.best_move(game, 3);
+                            cout << (!com_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
+                            game.move(next_move.first, next_move.second);
+                            round++;
+                        }
+                    }
+                }
+            }
+        }
+        draw();
         if (game.finish) {
             wait(500);
             state ^= 1;
