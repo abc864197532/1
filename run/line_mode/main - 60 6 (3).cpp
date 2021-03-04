@@ -652,7 +652,7 @@ int main() {
     int population = 60, number_of_change = 40, number_of_group = 6;
     tt = clock();
     cout << fixed << setprecision(10);
-    freopen("output - 80 5 (2).txt", "w", stdout);
+    freopen("output - 60 6 (3).txt", "w", stdout);
     vector <vector <Player>> first(number_of_group), second(number_of_group);
     for (int i = 0; i < number_of_group; ++i) {
         for (int j = 0; j < population; ++j) {
