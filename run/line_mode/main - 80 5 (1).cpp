@@ -649,7 +649,7 @@ void evolution (vector<vector <Player>> &first, vector <vector <Player>> &second
 }
 
 int main() {
-    int population = 100, number_of_change = 30, number_of_group = 3;
+    int population = 80, number_of_change = 30, number_of_group = 5;
     tt = clock();
     cout << fixed << setprecision(10);
     freopen("output - 80 5 (1).txt", "w", stdout);
