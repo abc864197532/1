@@ -66,6 +66,13 @@ struct Player {
         int p = game.cur_player;
         double rat_s = delta_rating(game, x, y), rat_op;
         game.move(x, y);
+        if (game.finish) {
+        	if (game.get_winner() == p) {
+        		return INF;
+			} else {
+				return 0;
+			}
+		}
         pair<int, int> op_best = best_move(game, dep - 1);
         rat_op = get_rating(game, op_best.first, op_best.second, dep - 1);
         return rat_s * next_now_rate[1] - rat_op * next_now_rate[0];

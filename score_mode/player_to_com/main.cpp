@@ -219,7 +219,7 @@ struct Player {
         double rat_s = delta_rating(game, x, y), rat_op;
         game.move(x, y);
         if (game.finish) {
-            if (game.get_winner() != 0) {
+            if (game.get_winner() == p) {
                 return INF;
             } else {
                 return 0;

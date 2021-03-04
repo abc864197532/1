@@ -8,12 +8,11 @@ uniform_real_distribution<> rdouble(0.0, 1.0);
 
 inline int rint(int a, int b) {return uniform_int_distribution<int>(a, b)(rng);}
 
-// -1 O 0 empty 1 X
 struct Table {
-    int state[3][3], winner;
+    int state[3][3], blue_score, red_score, empty_cell;
     bool finish;
 
-    Table () : winner(0), finish(false) { // init
+    Table () : blue_score(0), red_score(0), empty_cell(9), finish(false) { // init
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 state[i][j] = 0;
@@ -21,36 +20,40 @@ struct Table {
         }
     }
 
-    void update_winner_and_finish() {
-        if (winner != 0) return;
-        int row[3] = {}, col[3] = {}, diag[2] = {}, empty_cell = 0;
+    void update_score() {
+        int row[3] = {}, col[3] = {}, diag[2] = {};
+        red_score = blue_score = 0;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 row[i] += state[i][j];
                 col[j] += state[i][j];
-                if (state[i][j] == 0) {
-                    empty_cell++;
-                }
             }
             diag[0] += state[i][i];
             diag[1] += state[i][2 - i];
         }
         for (int i = 0; i < 3; ++i) {
-            if (row[i] == 3 || row[i] == -3) {
-                winner = row[i] / 3;
+            if (row[i] == 3) {
+                red_score++;
             }
-            if (col[i] == 3 || col[i] == -3) {
-                winner = col[i] / 3;
+            if (row[i] == -3) {
+                blue_score++;
+            }
+            if (col[i] == 3) {
+                red_score++;
+            }
+            if (col[i] == -3) {
+                blue_score++;
             }
         }
         for (int i = 0; i < 2; ++i) {
-            if (diag[i] == 3 || diag[i] == -3) {
-                winner = diag[i] / 3;
+            if (diag[i] == 3) {
+                red_score++;
+            }
+            if (diag[i] == -3) {
+                blue_score++;
             }
         }
-        if (winner != 0 || empty_cell == 0) {
-            finish = true;
-        }
+        finish = empty_cell == 0;
     }
 
     bool isEmpty(int x, int y) {
@@ -58,60 +61,66 @@ struct Table {
     }
 
     bool move(int x, int y, int p) { // p -> player
-        if (finish || !isEmpty(x, y)) {
+        if (!isEmpty(x, y)) {
             return false;
         }
         state[x][y] = p;
-        update_winner_and_finish();
+        empty_cell--;
+        update_score();
         return true;
     }
 };
 
 struct Game {
-    Table small[3][3], big;
-    int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_big_cell = 9;
+    Table small[3][3];
+    int cur_player = 1, last_move_x = 0, last_move_y = 0, empty_cell = 81;
+    int red_score = 0, blue_score = 0;
     bool could_choose_all = true, finish = false;
 
     bool valid(int x, int y) {
-        if (small[x / 3][y / 3].finish || !small[x / 3][y / 3].isEmpty(x % 3, y % 3)) {
+        if (!small[x / 3][y / 3].isEmpty(x % 3, y % 3)) {
             return false;
         }
         if (could_choose_all || (last_move_x == x / 3 && last_move_y == y / 3)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    void update_score() {
+        red_score = 0;
+        blue_score = 0;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                red_score += small[i][j].red_score;
+                blue_score += small[i][j].blue_score;
+            }
+        }
+        finish = empty_cell == 0;
     }
 
     bool move(int x, int y) {
         if (!valid(x, y)) {
             return false;
         }
-        small[x / 3][y / 3].move(x % 3, y % 3, cur_player);
-        small[x / 3][y / 3].update_winner_and_finish();
-        if (small[x / 3][y / 3].winner != 0) {
-            big.move(x / 3, y / 3, small[x / 3][y / 3].winner);
-            big.update_winner_and_finish();
-            empty_big_cell--;
-        } else if (small[x / 3][y / 3].finish) {
-            empty_big_cell--;
-        }
-        if (empty_big_cell == 0 || big.winner != 0) {
-            finish = true;
-        }
+        small[x / 3][y / 3].move(x % 3,y % 3, cur_player);
+        small[x / 3][y / 3].update_score();
+        empty_cell--;
+        update_score();
         last_move_x = x % 3;
         last_move_y = y % 3;
         cur_player = -cur_player;
+        could_choose_all = false;
         if (small[last_move_x][last_move_y].finish) {
             could_choose_all = true;
-        } else {
-            could_choose_all = false;
         }
         return true;
     }
 
     int get_winner() {
-        return big.winner;
+        if (red_score > blue_score) return 1;
+        if (red_score < blue_score) return -1;
+        return 0;
     }
 
     int get_state(int x, int y, int i, int j) {
@@ -119,23 +128,17 @@ struct Game {
     }
 
     int get_output_picture(int x, int y) {
-        int shift;
-        if (small[x / 3][y / 3].winner == 1) {
-            shift = 6;
-        } else if (small[x / 3][y / 3].winner == -1) {
-            shift = 3;
-        } else {
-            shift = 0;
+        int p = get_state(x / 3, y / 3, x % 3, y % 3);
+        if (p == 1) {
+            return 2;
         }
-        if (get_state(x / 3, y / 3, x % 3, y % 3) == 1) {
-            return shift + 2;
-        } else if (get_state(x / 3, y / 3, x % 3, y % 3) == -1) {
-            return shift + 3;
-        } else if (!finish && valid(x, y)) {
+        if (p == -1) {
+            return 3;
+        }
+        if (!finish && valid(x, y)) {
             return 0;
-        } else {
-            return 1 + shift;
         }
+        return 1;
     }
 
     vector<pair<int, int>> valid_moves() {
@@ -148,26 +151,16 @@ struct Game {
 };
 
 struct Player {
-    double line_cnt[2], ready_rate[3], occupy, s_op_rate[2], next_now_rate[2], omega[8], alpha;
+    double line_cnt[2], s_op_rate[2], next_now_rate[2];
     int win = 0, draw = 0, lose = 0;
     Player() {
-        double a[4];
-        for (int i = 0; i < 4; ++i) a[i] = rdouble(rng);
-        sort(a, a + 4);
-        line_cnt[0] = a[0];
-        line_cnt[1] = a[1];
-        ready_rate[0] = 0;
-        ready_rate[1] = a[2];
-        ready_rate[2] = a[3];
-        occupy = rdouble(rng) + 1;
+        line_cnt[0] = rdouble(rng);
+        line_cnt[1] = rdouble(rng);
+        if (line_cnt[0] > line_cnt[1]) swap(line_cnt[0], line_cnt[1]);
         s_op_rate[0] = rdouble(rng);
         s_op_rate[1] = 1.0 - s_op_rate[0];
         next_now_rate[0] = rdouble(rng) / 2;
         next_now_rate[1] = 1.0 - next_now_rate[0];
-        omega[0] = 1;
-        omega[1] = rdouble(rng);
-        for (int i = 2; i < 8; ++i) omega[i] = omega[i - 1] * omega[1];
-        alpha = rdouble(rng) + 1;
     }
     pair<int, int> best_move(Game game, int dep) {
         vector<pair<int, int>> moves = game.valid_moves();
@@ -181,289 +174,57 @@ struct Player {
         }
         return best;
     }
-    double get_small_attack_rating(Game game, int x, int y, int p) { // p -> player
-        if (game.small[x][y].finish) {
-            if (game.small[x][y].winner == p) {
-                return occupy;
-            } else {
-                return 0;
-            }
-        }
-        bool ready[3][3];
-        int ready_cnt = 0;
-        for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-            ready[i][j] = false;
-            if (game.get_state(x, y, i, j) == 0) {
-                {
-                    // row
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (j != k) {
-                        cnt += game.get_state(x, y, i, k);
-                    }
-                    if (cnt == p * 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                {
-                    // col
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        cnt += game.get_state(x, y, k, j);
-                    }
-                    if (cnt == p * 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                if (i == j) {
-                    // diag1
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        cnt += game.get_state(x, y, k, k);
-                    }
-                    if (cnt == p * 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                if (i == 2 - j) {
-                    // diag2
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        cnt += game.get_state(x, y, k, 2 - k);
-                    }
-                    if (cnt == p * 2) {
-                        ready[i][j] = true;
-                    }
-                }
-            }
-            if (ready[i][j]) ready_cnt++;
-        }
-        double ready_score = ready_rate[min(ready_cnt, 2)], line_score = 0;
-        vector <double> all_line;
-        // row
-        for (int i = 0; i < 3; ++i) {
+    double small_rating(Game game, int _i, int _j, int p){
+        double sum = 0;
+        for (int i = 0; i < 3; i++){
             int cnt = 0;
-            bool has_enemy = false, already = false;
-            for (int j = 0; j < 3; ++j) {
-                if (game.get_state(x, y, i, j) == p) {
-                    cnt++;
-                } else if (game.get_state(x, y, i, j) == -p) {
-                    has_enemy = true;
-                }
-                if (ready[i][j]) already = true;
+            for (int j = 0; j < 3; j++){
+                cnt += game.get_state(_i, _j, i, j) == p;
+                if (game.get_state(_i, _j, i, j) == -p) cnt = -3;
             }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(line_cnt[cnt]);
-            }
+            if (cnt >= 0) sum += cnt == 3 ? 1 : line_cnt[cnt];
         }
-        // col
-        for (int j = 0; j < 3; ++j) {
+        for (int i = 0; i < 3; i++){
             int cnt = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                if (game.get_state(x, y, i, j) == p) {
-                    cnt++;
-                } else if (game.get_state(x, y, i, j) == -p) {
-                    has_enemy = true;
-                }
-                if (ready[i][j]) already = true;
+            for (int j = 0; j < 3; j++){
+                cnt += game.get_state(_i, _j, j, i) == p;
+                if (game.get_state(_i, _j, i, j) == -p) cnt = -3;
             }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(line_cnt[cnt]);
-            }
+            if (cnt >= 0) sum += cnt == 3 ? 1 : line_cnt[cnt];
         }
-        // diag1
-        {
-            int cnt = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                if (game.get_state(x, y, i, i) == p) {
-                    cnt++;
-                } else if (game.get_state(x, y, i, i) == -p) {
-                    has_enemy = true;
-                }
-                if (ready[i][i]) already = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(line_cnt[cnt]);
-            }
+        int cnt = 0;
+        for (int i = 0; i < 3; i++){
+            if (game.get_state(_i, _j, i, i) == -p) cnt = -3;
+            else cnt += game.get_state(_i, _j, i, i) == p;
         }
-        // diag2
-        {
-            int cnt = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                if (game.get_state(x, y, i, 2 - i) == p) {
-                    cnt++;
-                } else if (game.get_state(x, y, i, 2 - i) == -p) {
-                    has_enemy = true;
-                }
-                if (ready[i][2 - i]) already = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(line_cnt[cnt]);
-            }
+        if (cnt >= 0) sum += cnt == 3 ? 1 : line_cnt[cnt];
+        cnt = 0;
+        for (int i = 0; i < 3; i++){
+            if (game.get_state(_i, _j, i, 2 - i) == -p) cnt = -3;
+            else cnt += game.get_state(_i, _j, i, 2 - i) == p;
         }
-        if (!all_line.empty()) {
-            sort(all_line.rbegin(), all_line.rend());
-            double base = 0;
-            for (int i = 0; i < all_line.size(); ++i) {
-                line_score += all_line[i] * omega[i];
-                base += omega[i];
-            }
-            line_score /= base;
-        }
-        return (ready_score + line_score) / 2;
+        if (cnt >= 0) sum += cnt == 3 ? 1 : line_cnt[cnt];
+        return sum;
     }
-    double get_small_rating(Game game, int x, int y, int p) {
-        return get_small_attack_rating(game, x, y, p) * s_op_rate[0] - get_small_attack_rating(game, x, y, -p) * s_op_rate[1];
-    }
-    double get_big_rating(Game game, int p) {
-        if (game.finish) {
-            if (game.get_winner() == p) {
-                return INF;
-            } else if (game.get_winner() == -p) {
-                return -INF;
-            } else {
-                return 0;
-            }
-        }
-        double small_rating[3][3], ready_score = 0, line_score = 0;
-        vector <double> all_line;
-        for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-            small_rating[i][j] = get_small_rating(game, i, j, p);
-        }
-        bool ready[3][3];
-        for (int i = 0; i < 3; ++i) for (int j = 0; j < 3; ++j) {
-            ready[i][j] = false;
-            if (!game.small[i][j].finish) {
-                {
-                    // row
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (j != k) {
-                        if (game.small[i][k].winner == p) cnt++;
-                    }
-                    if (cnt == 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                {
-                    // col
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][j].winner == p) cnt++;
-                    }
-                    if (cnt == 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                if (i == j) {
-                    // diag1
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][k].winner == p) cnt++;
-                    }
-                    if (cnt == 2) {
-                        ready[i][j] = true;
-                    }
-                }
-                if (i == 2 - j) {
-                    // diag2
-                    int cnt = 0;
-                    for (int k = 0; k < 3; ++k) if (i != k) {
-                        if (game.small[k][2 - k].winner == p) cnt++;
-                    }
-                    if (cnt == 2) {
-                        ready[i][j] = true;
-                    }
-                }
-            }
-            if (ready[i][j]) ready_score += pow(alpha, small_rating[i][j]);
-        }
-        // row
-        for (int i = 0; i < 3; ++i) {
-            double sum = 0;
-            bool has_enemy = false, already = false;
-            for (int j = 0; j < 3; ++j) {
-                sum += small_rating[i][j];
-                if (ready[i][j]) already = true;
-                if (game.small[i][j].winner != p && game.small[i][j].finish) has_enemy = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(pow(alpha, sum / 3));
-            }
-        }
-        // col
-        for (int j = 0; j < 3; ++j) {
-            double sum = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                sum += small_rating[i][j];
-                if (ready[i][j]) already = true;
-                if (game.small[i][j].winner != p && game.small[i][j].finish) has_enemy = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(pow(alpha, sum / 3));
-            }
-        }
-        // diag1
-        {
-            double sum = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                sum += small_rating[i][i];
-                if (ready[i][i]) already = true;
-                if (game.small[i][i].winner != p && game.small[i][i].finish) has_enemy = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(pow(alpha, sum / 3));
-            }
-        }
-        // diag2
-        {
-            double sum = 0;
-            bool has_enemy = false, already = false;
-            for (int i = 0; i < 3; ++i) {
-                sum += small_rating[i][2 - i];
-                if (ready[i][2 - i]) already = true;
-                if (game.small[i][2 - i].winner != p && game.small[i][2 - i].finish) has_enemy = true;
-            }
-            if (!already) {
-                if (has_enemy) all_line.push_back(0);
-                else all_line.push_back(pow(alpha, sum / 3));
-            }
-        }
-        if (!all_line.empty()) {
-            sort(all_line.rbegin(), all_line.rend());
-            double base = 0;
-            for (int i = 0; i < all_line.size(); ++i) {
-                line_score += all_line[i] * omega[i];
-                base += omega[i];
-            }
-            line_score /= base;
-        }
-        return (ready_score + line_score) / 2;
+    double delta_rating(Game game, int x, int y){
+        int p  = game.cur_player;
+        double ans = -small_rating(game, x / 3, y / 3, p) * s_op_rate[0] + small_rating(game, x / 3, y / 3, -p) * s_op_rate[1];
+        game.move(x, y);
+        ans += small_rating(game, x / 3, y / 3, p) * s_op_rate[0] - small_rating(game, x / 3, y / 3, -p) * s_op_rate[1];
+        return ans;
     }
     double get_rating(Game game, int x, int y, int dep) {
         if (dep == 0) return 0;
         int p = game.cur_player;
-        double rat_s = -get_big_rating(game, p), rat_op;
+        double rat_s = delta_rating(game, x, y), rat_op;
         game.move(x, y);
-        // check whether the move could win
         if (game.finish) {
-            if (game.get_winner() != 0) {
-                return INF;
-            } else {
-                return 0;
-            }
-        }
-        rat_s += get_big_rating(game, p);
+        	if (game.get_winner() == p) {
+        		return INF;
+			} else {
+				return 0;
+			}
+		}
         pair<int, int> op_best = best_move(game, dep - 1);
         rat_op = get_rating(game, op_best.first, op_best.second, dep - 1);
         return rat_s * next_now_rate[1] - rat_op * next_now_rate[0];
@@ -484,23 +245,14 @@ struct Player {
     void get_value_from_stdin() {
         line_cnt[0] = input_double();
         line_cnt[1] = input_double();
-        ready_rate[1] = input_double();
-        ready_rate[2] = input_double();
-        ready_rate[0] = 0;
-        occupy = input_double();
         s_op_rate[0] = input_double();
         next_now_rate[0] = input_double();
-        omega[1] = input_double();
-        alpha = input_double();
         s_op_rate[1] = 1.0 - s_op_rate[0];
         next_now_rate[1] = 1.0 - next_now_rate[0];
-        omega[0] = 1;
-        for (int i = 2; i < 8; ++i) omega[i] = omega[i - 1] * omega[1];
     }
     friend ostream &operator<<(ostream &o, Player &p) {
-        return o << p.line_cnt[0] << ' ' << p.line_cnt[1] << ' ' << p.ready_rate[1] << ' ' << p.ready_rate[2] << ' '
-        << p.occupy << ' ' << p.s_op_rate[0] << ' ' << p.next_now_rate[0] << ' ' << p.omega[1] << ' ' << p.alpha
-        << " Score " << p.win * 3 + p.draw << ' ' << p.win << "W " << p.draw << "D " << p.lose << "L";
+        return o << p.line_cnt[0] << ' ' << p.line_cnt[1] << ' ' << p.s_op_rate[0] << ' ' << p.next_now_rate[0]
+                 << " Score " << p.win * 3 + p.draw << ' ' << p.win << "W " << p.draw << "D " << p.lose << "L";
     }
     bool operator < (const Player &other) const {
         return win * 3 + draw > other.win * 3 + other.draw;
@@ -529,13 +281,6 @@ Player generate_child(Player &p1, Player &p2) {
         int choose = rint(0, 1);
         ch.line_cnt[0] = par[choose].line_cnt[0];
         ch.line_cnt[1] = par[choose].line_cnt[1];
-        ch.ready_rate[0] = par[choose].ready_rate[0];
-        ch.ready_rate[1] = par[choose].ready_rate[1];
-        ch.ready_rate[2] = par[choose].ready_rate[2];
-    }
-    {
-        int choose = rint(0, 1);
-        ch.occupy = par[choose].occupy;
     }
     {
         int choose = rint(0, 1);
@@ -547,29 +292,11 @@ Player generate_child(Player &p1, Player &p2) {
         ch.next_now_rate[0] = par[choose].next_now_rate[0];
         ch.next_now_rate[1] = par[choose].next_now_rate[1];
     }
-    {
-        int choose = rint(0, 1);
-        for (int i = 0; i < 8; ++i) {
-            ch.omega[i] = par[choose].omega[i];
-        }
-    }
-    {
-        int choose = rint(0, 1);
-        ch.alpha = par[choose].alpha;
-    }
     // mutation
     if (rint(0, 999) <= 20) {
-        double a[4];
-        for (int i = 0; i < 4; ++i) a[i] = rdouble(rng);
-        sort(a, a + 4);
-        ch.line_cnt[0] = a[0];
-        ch.line_cnt[1] = a[1];
-        ch.ready_rate[0] = 0;
-        ch.ready_rate[1] = a[2];
-        ch.ready_rate[2] = a[3];
-    }
-    if (rint(0, 999) <= 20) {
-        ch.occupy = rdouble(rng) + 1;
+		ch.line_cnt[0] = rdouble(rng);
+        ch.line_cnt[1] = rdouble(rng);
+        if (ch.line_cnt[0] > ch.line_cnt[1]) swap(ch.line_cnt[0], ch.line_cnt[1]);
     }
     if (rint(0, 999) <= 20) {
         ch.s_op_rate[0] = rdouble(rng);
@@ -578,14 +305,6 @@ Player generate_child(Player &p1, Player &p2) {
     if (rint(0, 999) <= 20) {
         ch.next_now_rate[0] = rdouble(rng) / 2;
         ch.next_now_rate[1] = 1.0 - ch.next_now_rate[0];
-    }
-    if (rint(0, 999) <= 20) {
-        ch.omega[0] = 1;
-        ch.omega[1] = rdouble(rng);
-        for (int i = 2; i < 8; ++i) ch.omega[i] = ch.omega[i - 1] * ch.omega[1];
-    }
-    if (rint(0, 999) <= 20) {
-        ch.alpha = rdouble(rng) + 1;
     }
     return ch;
 }
@@ -652,7 +371,7 @@ int main() {
     int population = 200, number_of_change = 30, number_of_group = 3;
     tt = clock();
     cout << fixed << setprecision(10);
-    freopen("output - 200 3 (2).txt", "w", stdout);
+    // freopen("output - 150 6 (1).txt", "w", stdout);
     vector <vector <Player>> first(number_of_group), second(number_of_group);
     for (int i = 0; i < number_of_group; ++i) {
         for (int j = 0; j < population; ++j) {
