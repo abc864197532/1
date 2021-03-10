@@ -264,7 +264,7 @@ void play(Player &p1, Player &p2) {
     Player p[2]{p1, p2}; //p[0] 1 first
     int s = 0, round = 0;
     do {
-        pair<int, int> next_move = p[s].best_move(game, (round >= 20 ? 3 : 2));
+        pair<int, int> next_move = p[s].best_move(game, 3);
         game.move(next_move.first, next_move.second);
         s ^= 1;
         round++;
@@ -281,6 +281,7 @@ Player generate_child(Player &p1, Player &p2) {
         int choose = rint(0, 1);
         ch.line_cnt[0] = par[choose].line_cnt[0];
         ch.line_cnt[1] = par[choose].line_cnt[1];
+        ch.line_cnt[2] = par[choose].line_cnt[2];
     }
     {
         int choose = rint(0, 1);
@@ -296,7 +297,8 @@ Player generate_child(Player &p1, Player &p2) {
     if (rint(0, 999) <= 20) {
 		ch.line_cnt[0] = rdouble(rng);
         ch.line_cnt[1] = rdouble(rng);
-        if (ch.line_cnt[0] > ch.line_cnt[1]) swap(ch.line_cnt[0], ch.line_cnt[1]);
+        ch.line_cnt[2] = rdouble(rng);
+        sort(ch.line_cnt, ch.line_cnt + 3);
     }
     if (rint(0, 999) <= 20) {
         ch.s_op_rate[0] = rdouble(rng);
@@ -371,7 +373,7 @@ int main() {
     int population = 150, number_of_change = 30, number_of_group = 6;
     tt = clock();
     cout << fixed << setprecision(10);
-    // freopen("output - 150 6 (2).txt", "w", stdout);
+    // freopen("output - 150 6 (4).txt", "w", stdout);
     vector <vector <Player>> first(number_of_group), second(number_of_group);
     for (int i = 0; i < number_of_group; ++i) {
         for (int j = 0; j < population; ++j) {

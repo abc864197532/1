@@ -594,8 +594,19 @@ int main() {
     };
 
     bool com_first = true;  // first or second
+    int dep = 3;
+    function<void(void)> update_dep = [&]() {
+        int cnt = 0;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (game.small[i][j].winner != 0) cnt++;
+            }
+        }
+        if (round >= 40 || cnt >= 3) dep = 4;
+    };
+
     if (com_first) {
-        pair<int, int> next_move = com.best_move(game, 3);
+        pair<int, int> next_move = com.best_move(game, dep);
         game.move(next_move.first, next_move.second);
         cout << "Red: " << next_move.first << ' ' << next_move.second << endl;
         round++;
@@ -621,6 +632,7 @@ int main() {
                         draw();
                         if (!game.finish)  {
                             wait(500);
+                            update_dep();
                             pair<int, int> next_move = com.best_move(game, 3);
                             cout << (!com_first ? "Blue: " : "Red: ") << next_move.first << ' ' << next_move.second << endl;
                             game.move(next_move.first, next_move.second);
